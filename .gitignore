@@ -1,0 +1,3 @@
+#ignore vivado files
+
+riscv-32-cpu/vivado*

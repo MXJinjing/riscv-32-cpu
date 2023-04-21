@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: the top module of this cpu
 // 
 // Dependencies: 
 // 
@@ -38,7 +38,7 @@ module CPU(
         wire[31:0] _reg_1_data;
         wire[31:0] _reg_2_data;
         
-        Reg_unit new_reg_unit(
+        Reg_unit new_reg_unit_inst(
             .clk(clk),
             .reg_write_sig(_reg_write_sig),
             .reg_read_sig(_reg_read_sig),

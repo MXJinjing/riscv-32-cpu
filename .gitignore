@@ -1,3 +1,4 @@
 #ignore vivado files
 
 riscv-32-cpu/vivado*
+riscv-32-cpu/riscv-32-cpu.sim/*

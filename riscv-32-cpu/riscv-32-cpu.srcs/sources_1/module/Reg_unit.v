@@ -21,7 +21,7 @@
 
 
 module Reg_unit(
-        input clk,  //clock input signals
+        input wire clk,                       //clock input signals
 
         input wire reg_write_sig,             //indicate whether a write operation is required
         input wire reg_read_sig,              //indicate whether a read operation is required

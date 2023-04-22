@@ -5,11 +5,11 @@
 // 
 // Create Date: 2023/04/21 12:32:29
 // Design Name: 
-// Module Name: registers
+// Module Name: Reg_unit
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Register unit to save data in registers
 // 
 // Dependencies: 
 // 

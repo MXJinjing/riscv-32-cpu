@@ -68,6 +68,23 @@ initial begin
     data1 = 32'hffffffff;
     data2 = 32'h00000001;
     #10;
+
+    //test SLL instruction
+    sig = `ALU_CONTROL_SLL;
+    data1 = 32'b00000001;
+    data2 = 32'b00000010;
+    #10;
+
+    //test SRL instruction
+    sig = `ALU_CONTROL_SRL;
+    data1 = 32'b10000000;
+    data2 = 32'b00000100;
+
+    //test SRA instruction
+    sig = `ALU_CONTROL_SRA;
+    data1 = 32'hffffffff;
+    data2 = 32'b00000100;
+
 end
 
 endmodule

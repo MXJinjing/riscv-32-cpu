@@ -35,8 +35,7 @@ module RAM_bank(
 
     );
     
-    assign men_datain = reg_rs2_data
-    assign mem_addr = reg_rs1_data + offset
-    
+    assign mem_datain = reg_rs2_data;
+    assign mem_addr = reg_rs1_data + offset;
     
 endmodule

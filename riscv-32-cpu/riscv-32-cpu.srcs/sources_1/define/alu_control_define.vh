@@ -20,10 +20,11 @@
 
 //-=-=-=-=-=-Branches-=-=-=-=-=-
 `define ALU_CONTROL_BEQ         5'b10000          //branch if equal
-`define ALU_CONTROL_BNE         5'b11000          //branch if not equal
-`define ALU_CONTROL_BLT         5'b11100          //branch if less than (same code as SLT)
-`define ALU_CONTROL_BGE         5'b10110          //branch if greater than
-`define ALU_CONTROL_BLTU        5'b10011          //branch if less than unsigned
-`define ALU_CONTROL_BGEU        5'b11001          //branch if greater than unsigned
+`define ALU_CONTROL_BNE         5'b10001          //branch if not equal
+`define ALU_CONTROL_BLT         5'b10010          //branch if less than (same code as SLT)
+`define ALU_CONTROL_BGE         5'b10011          //branch if greater than
+`define ALU_CONTROL_BLTU        5'b10100          //branch if less than unsigned
+`define ALU_CONTROL_BGEU        5'b10101          //branch if greater than unsigned
 
 //-=-=-=-=-LOAD AND SAVE-=-=-=-=-
+`define ALU_CONTROL_OFFSET      5'b11100          //calculate the offset

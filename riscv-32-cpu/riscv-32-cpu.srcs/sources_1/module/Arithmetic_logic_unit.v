@@ -32,8 +32,15 @@ module Arithmetic_logic_unit(
         output reg                   overflow           //overflow signal
     );
 
+    wire equal;
+    wire signed_less_than;
+    wire unsigned_less_than;
+    wire[31:0] sext_offset;
 
-    assign equal = (src_1_data == src_2_data) ? 1b'1 : 1b'0;
+    assign equal = (src_1_data == src_2_data) ? 1'b1 : 1'b0;
+    assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
+    assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
+    assign sext_offset = { 20{src_2_data[11]} , src_2_data[11:0]  };
 
     always @(*) begin
         case (ALU_control_sig)
@@ -66,11 +73,13 @@ module Arithmetic_logic_unit(
 
             //FOR COMPARE INSTRUCTION
             `ALU_CONTROL_SLT:begin
-                ALU_result = ($signed(src_1_data) < $signed(src_2_data))? 32'b1 : 32'b0;
+                ALU_result = (signed_less_than)? 32'b1 : 32'b0;
             end
             `ALU_CONTROL_SLTU:begin
-                ALU_result = ($unsigned(src_1_data) < $unsigned(src_2_data))? 32'b1 : 32'b0;
+                ALU_result = (unsigned_less_than)? 32'b1 : 32'b0;
             end
+
+            //FOR SHIFT INSTRUCTION
             `ALU_CONTROL_SLL:begin
                 ALU_result <= src_1_data << src_2_data[4:0];
             end
@@ -81,30 +90,31 @@ module Arithmetic_logic_unit(
                 ALU_result <= src_1_data >>> src_2_data[4:0];
             end
 
-
             //FOR BRANCH INSTRUCTION
             `ALU_CONTROL_BEQ:begin
                 ALU_result[0] <= (equal)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BNE:begin
-                ALU_result[0] <= (src_1_data != src_2_data)? 1'b1 : 1'b0;
+                ALU_result[0] <= (~equal)? 1'b1 : 1'b0;
             end
            `ALU_CONTROL_BLT:begin
-                ALU_result[0] <= ($signed(src_1_data) < $signed(src_2_data))? 1'b1 : 1'b0;
+                ALU_result[0] <= (signed_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BGE:begin
-                ALU_result[0] <= ($signed(src_1_data) >= $signed(src_2_data))? 1'b1 : 1'b0;
+                ALU_result[0] <= (~signed_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BLTU:begin
-                ALU_result[0] <= ($unsigned(src_1_data) < $unsigned(src_2_data))? 1'b1 : 1'b0;
+                ALU_result[0] <= (unsigned_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BGEU:begin
-                ALU_result[0] <= ($unsigned(src_1_data) >= $unsigned(src_2_data))? 1'b1 : 1'b0;
+                ALU_result[0] <= (~unsigned_less_than)? 1'b1 : 1'b0;
             end
 
-            //FOR RAM OFFSET CALCULATION
+            //FOR RAM OFFSET CALCULATION x[rs1] + sext(offset)
+            `ALU_CONTROL_OFFSET:begin
+                ALU_result <= src_1_data + offset;
+            end
             
-
             //DO NOTHING FOR OTHER INSTRUCTION
             default:begin
                 ALU_result <= 32'hffffffff;

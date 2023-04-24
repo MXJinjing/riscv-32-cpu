@@ -29,7 +29,7 @@ module Mux_alu_source(
         output wire[31:0] src2
     );
     
-    assign src2 = (alu_src_control_sig == `SRC_REG2_RS2) ? reg_rs2_data:
+    assign src2 = (alu_src_control_sig == `SRC_REG_RS2) ? reg_rs2_data:
                 (alu_src_control_sig == `SRC_REG_PC) ? reg_pc_data:
                 (alu_src_control_sig == `SRC_IMM) ? imm : 32'h00000000;
 

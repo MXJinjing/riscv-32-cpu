@@ -29,17 +29,8 @@ module Mux_alu_source(
         output wire[31:0] src2
     );
     
-    always @(*) begin
-        case(alu_src_control_sig) begin
-            `REG_RS2: src2 = reg_rs2_data;
-            `IMM_31_0: src2 = imm;
-            `IMM_31_12: src2 = imm[31:12];
-            `IMM_20_1: src2 = imm[20:1];
-            `IMM_11_0: src2 = imm[11:0];
-            `IMM_12_1: src2 = imm[12:1];
-            `REG_PC: src2 = reg_pc_data;
-            default: src2 = 32'd0;
-        end
-    end
+    assign src2 = (alu_src_control_sig == `SRC_REG2_RS2) ? reg_rs2_data:
+                (alu_src_control_sig == `SRC_REG_PC) ? reg_pc_data:
+                (alu_src_control_sig == `SRC_IMM) ? imm : 32'h00000000;
 
 endmodule

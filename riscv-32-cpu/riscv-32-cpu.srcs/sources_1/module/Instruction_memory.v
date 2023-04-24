@@ -20,19 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Instruction_memory(
-        input wire     clk,
-        input wire     rst,
-        
-        output wire[31:0]    instruction
+module Instruction_memory (
+    input wire clk,
+    input wire [31:0] PC,           //pc address
+    output wire [31:0] Dout         //instruction out
     );
+    //reg [3:0] flag;
+    wire[31:0] mem_address;
+    assign mem_address = { 1'b0, {PC[31:1]} } ;
     
-    reg[31:0]   instruction;
-
-    always @(*)begin
-        
-    end
+    blk_mem_gen_0 uut(.clka(clk),.addra(mem_address[10:0]),.douta(Dout));
     
 endmodule
+
 
 

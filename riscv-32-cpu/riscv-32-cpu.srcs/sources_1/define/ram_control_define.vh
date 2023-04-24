@@ -1,0 +1,2 @@
+`define RAM_WRITE_ENABLE = 1'b1
+`define RAM_WRITE_DISABLE = 1'b0

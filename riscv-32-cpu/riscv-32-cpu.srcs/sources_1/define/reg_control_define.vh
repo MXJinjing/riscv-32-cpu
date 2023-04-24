@@ -1,0 +1,2 @@
+`define REG_WRITE_ENABLE = 1'b1
+`define REG_WRITE_DISABLE = 1'b0

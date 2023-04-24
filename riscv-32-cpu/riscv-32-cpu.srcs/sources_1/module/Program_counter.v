@@ -26,7 +26,7 @@ module Program_counter(
         input wire          clk,                   // input clock signal
         input wire          rst,                   // reset signal
         input wire[1:0]     PC_control_sig,        // control signals
-        input wire[20:1]    offset,                // offset 20bit
+        input wire[20:0]    offset,                // offset 20bit
         input wire[31:0]    reg_rs1_data,          // register rs1 
         input wire          ALU_result_1bit,       // equality calculated by alu
 
@@ -41,11 +41,12 @@ module Program_counter(
     wire[31:0]  sign_extended_20;
     wire[31:0]  pc_add_4;
     
-    assign sign_extended_12 =(offset[12])? { 20'b1111_1111_1111_1111_1111 , offset[12:1] }:{ 20'b0000_0000_0000_0000_0000 , offset[12:1] };
-    assign sign_extended_20 =(offset[20])? { 12'b1111_1111_1111 , offset[20:1] }:{ 12'b0000_0000_0000 , offset[20:1] };
+    assign sign_extended_11 =(offset[11])? { 19'b1111_1111_1111_1111_1111 , offset[11:0], 1'b1 }:{ 19'b0000_0000_0000_0000_0000 , offset[11:0], 1'b1 };
+    assign sign_extended_12 =(offset[12])? { 19'b1111_1111_1111_1111_1111 , offset[12:1], 1'b1 }:{ 19'b0000_0000_0000_0000_0000 , offset[12:1], 1'b1 };
+    assign sign_extended_20 =(offset[20])? { 11'b1111_1111_1111 , offset[20:1] ,1'b1 }:{ 11'b0000_0000_0000 , offset[20:1] ,1'b1 };
     assign pc_add_4 = current_pc + 32'd4;
     
-    always @ (negedge clk) begin
+    always @ (posedge clk) begin
         if(rst)begin
             pc <= 32'd0;
         end
@@ -59,7 +60,7 @@ module Program_counter(
             end
             `PC_CONTROL_JALR:begin
                 reg_rd_addr <= current_pc +  32'd4;
-                pc <= (reg_rs1_data + sign_extended_12) & 32'hfffffffe;
+                pc <= (reg_rs1_data + sign_extended_11) & 32'hfffffffe;
             end
             `PC_CONTROL_JAL:begin
                 reg_rd_addr <= current_pc + 32'd4;
@@ -71,5 +72,8 @@ module Program_counter(
         endcase
         end
     end
-
+    
+    initial begin
+        pc <= 32'b0;
+    end
 endmodule

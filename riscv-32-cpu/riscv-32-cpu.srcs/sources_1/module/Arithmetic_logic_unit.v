@@ -25,11 +25,11 @@ module Arithmetic_logic_unit(
         input               clk,               //clock input signals
         input wire[4:0]     ALU_control_sig,   //control signals
 
-        input wire[3 1'b1 : 1'b0]    src_1_data,        //input data from source 1
-        input wire[3 1'b1 : 1'b0]    src_2_data,        //input data from source 2
+        input wire[31:0]    src_1_data,        //input data from source 1
+        input wire[31:0]    src_2_data,        //input data from source 2
 
-        output reg[3 1'b1 : 1'b0]    ALU_result,        //output data
-        output reg                   overflow           //overflow signal
+        output reg[31:0]    ALU_result,        //output data
+        output reg          overflow           //overflow signal
     );
 
     wire equal;
@@ -40,7 +40,8 @@ module Arithmetic_logic_unit(
     assign equal = (src_1_data == src_2_data) ? 1'b1 : 1'b0;
     assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
     assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
-    assign sext_offset = { 20{src_2_data[11]} , src_2_data[11:0]  };
+    assign sext_offset = (src_2_data[11]) ? { 20'b1111_1111_1111_1111 , src_2_data[11:0]  } :
+                           { 20'b0000_0000_0000_0000 , src_2_data[11:0]  };
 
     always @(*) begin
         case (ALU_control_sig)
@@ -48,12 +49,12 @@ module Arithmetic_logic_unit(
             //FOR ARITHMETIC INSTRUCTION
             `ALU_CONTROL_ADD:begin
                 ALU_result <= src_1_data + src_2_data;
-                overflow_sig = ($signed(src_1_data) + $signed(src_2_data) > 32'h7fffffff) || 
+                overflow = ($signed(src_1_data) + $signed(src_2_data) > 32'h7fffffff) || 
                 ($signed(src_1_data) + $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
             end
             `ALU_CONTROL_SUB:begin
                 ALU_result <= src_1_data - src_2_data;
-                overflow_sig = ($signed(src_1_data) - $signed(src_2_data) > 32'h7fffffff) || 
+                overflow = ($signed(src_1_data) - $signed(src_2_data) > 32'h7fffffff) || 
                 ($signed(src_1_data) - $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
             end
 
@@ -112,7 +113,7 @@ module Arithmetic_logic_unit(
 
             //FOR RAM OFFSET CALCULATION x[rs1] + sext(offset)
             `ALU_CONTROL_OFFSET:begin
-                ALU_result <= src_1_data + offset;
+                ALU_result <= src_1_data + sext_offset;
             end
             
             //DO NOTHING FOR OTHER INSTRUCTION

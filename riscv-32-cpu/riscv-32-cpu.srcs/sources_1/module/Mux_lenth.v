@@ -35,8 +35,10 @@ module Mux_lenth(
     wire[31:0] data_unsigned_byte;
 
     assign data_signed_word = data_32_bit;
-    assign data_signed_half = { 16{data_32_bit[15]}, data_32_bit[15:0] };
-    assign data_signed_byte = { 24{data_32_bit[7]} , data_32_bit[7:0] };
+    assign data_signed_half = (data_32_bit[15])? {16'b1111_1111_1111_1111 , data_32_bit[15:0] } :
+                                {16'b0000_0000_0000_0000 , data_32_bit[15:0] };
+    assign data_signed_byte = (data_32_bit[7])? {24'b1111_1111_1111_1111_1111_1111 , data_32_bit[7:0] } :
+                                {24'b0000_0000_0000_0000_0000_0000 , data_32_bit[7:0] };
     assign data_unsigned_half = { 16'h0000, data_32_bit[15:0] };
     assign data_unsigned_byte = { 24'h000000, data_32_bit[7:0] };
 

@@ -31,7 +31,7 @@ module RAM_bank(
         input wire[11:0] offset,              // offset of the memory address
 
         output wire mem_addr,                  // address of the memory
-        output wire[31:0] mem_datain,          // data read from the memory
+        output wire[31:0] mem_datain          // data read from the memory
 
     );
     

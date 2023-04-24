@@ -25,8 +25,10 @@ module Register_bank(
 
         input wire reg_write_sig,             //indicate whether a write operation is required
         
-        input wire[4:0] reg_1_addr,           //address of the first register to be read
-        input wire[4:0] reg_2_addr,           //address of the second register to be read
+        input wire[4:0] reg_r1_addr,          //address of the first register to be read
+        input wire[4:0] reg_r2_addr,          //address of the second register to be read
+
+        input wire[4:0] reg_w1_addr,          //address of the first register to be write
         
         input wire[31:0] write_data,          //date to be written to the register
         
@@ -38,12 +40,12 @@ module Register_bank(
     
     reg[31:0]  x[31:0];                       //registers x[0] to x[31]
     
-    assign reg_1_data = x[reg_1_addr];        //get data from the registers
-    assign reg_2_data = x[reg_2_addr];
+    assign reg_r1_data = x[reg_r1_addr];        //get data from the registers
+    assign reg_r2_data = x[reg_r2_addr];
     
     always @ (negedge clk) begin
         if(reg_write_sig) begin              //write data from the registers
-            x[reg_1_addr] <= write_data;
+            x[reg_w1_addr] <= write_data;
         end
         x[0] = 32'h0;                         //x[0] is always set to zero
     end

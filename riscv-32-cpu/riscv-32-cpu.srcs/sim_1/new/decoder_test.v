@@ -23,7 +23,7 @@
 module decoder_test(
     );
 
-    reg[31:0] instuction;
+    reg[31:0] instruction;
     wire[2:0] funct3;
     wire[6:0] funct7;
     wire[6:0] opcode;
@@ -33,8 +33,8 @@ module decoder_test(
     wire[4:0] reg_rs2_addr;
     
     
-    Instuction_decoder decoder(
-        .instuction(instuction),
+    Instruction_decoder decoder(
+        .instruction(instruction),
         .opcode(opcode),
         .funct3(funct3),
         .funct7(funct7),
@@ -47,13 +47,13 @@ module decoder_test(
 
     
     initial begin
-        instuction <= 32'b00000000001100010000000010110011;
+        instruction <= 32'b00000000001100010000000010110011;
         #10
-        instuction <= 32'b00000100000000000000000000010011;
+        instruction <= 32'b00000100000000000000000000010011;
         #10
-        instuction <= 32'b00000000010000000000000011101111;
+        instruction <= 32'b00000000010000000000000011101111;
         #10
-        instuction <= 32'b00000000010000011100000101100011;
+        instruction <= 32'b00000000010000011100000101100011;
     end
 
 endmodule

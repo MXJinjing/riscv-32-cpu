@@ -23,7 +23,7 @@
 
 module Mux_alu_source(
         input wire[2:0] reg_src_control_sig,
-        input wire[31:0] return_addr
+        input wire[31:0] return_addr,
         input wire[31:0] ALU_result,
         input wire[31:0] load_data,
         output wire[31:0] src

@@ -14,7 +14,7 @@
 `define SR_F3          3'b101              //shift right
 
 `define SRL_F7      7'b0000000             //shift right logical
-`define SRA_F7      3'b0100000             //shift right arithmetic
+`define SRA_F7      7'b0100000             //shift right arithmetic
 
 //-=-=-=-=-Arithmetic-=-=-=-=-
 `define ADD_F3         3'b000              //addition

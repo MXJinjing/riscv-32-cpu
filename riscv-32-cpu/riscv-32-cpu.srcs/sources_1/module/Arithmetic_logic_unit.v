@@ -47,72 +47,72 @@ module Arithmetic_logic_unit(
         case (ALU_control_sig)
 
             //FOR ARITHMETIC INSTRUCTION
-            `ALU_CONTROL_ADD:begin
+            `ALU_ADD:begin
                 ALU_result <= src_1_data + src_2_data;
                 overflow = ($signed(src_1_data) + $signed(src_2_data) > 32'h7fffffff) || 
                 ($signed(src_1_data) + $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
             end
-            `ALU_CONTROL_SUB:begin
+            `ALU_SUB:begin
                 ALU_result <= src_1_data - src_2_data;
                 overflow = ($signed(src_1_data) - $signed(src_2_data) > 32'h7fffffff) || 
                 ($signed(src_1_data) - $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
             end
 
             //FOR LOGIC INSTRUCTION
-            `ALU_CONTROL_AND:begin
+            `ALU_AND:begin
                 ALU_result <= src_1_data & src_2_data;
             end
-            `ALU_CONTROL_OR:begin
+            `ALU_OR:begin
                 ALU_result <= src_1_data | src_2_data;
             end
-            `ALU_CONTROL_XOR:begin
+            `ALU_XOR:begin
                 ALU_result <= src_1_data ^ src_2_data;
             end
-            `ALU_CONTROL_NOR:begin
+            `ALU_NOR:begin
                 ALU_result <= ~(src_1_data | src_2_data);
             end
 
             //FOR COMPARE INSTRUCTION
-            `ALU_CONTROL_SLT:begin
+            `ALU_SLT:begin
                 ALU_result = (signed_less_than)? 32'b1 : 32'b0;
             end
-            `ALU_CONTROL_SLTU:begin
+            `ALU_SLTU:begin
                 ALU_result = (unsigned_less_than)? 32'b1 : 32'b0;
             end
 
             //FOR SHIFT INSTRUCTION
-            `ALU_CONTROL_SLL:begin
+            `ALU_SLL:begin
                 ALU_result <= src_1_data << src_2_data[4:0];
             end
-            `ALU_CONTROL_SRL:begin
+            `ALU_SRL:begin
                 ALU_result <= src_1_data >> src_2_data[4:0];
             end
-            `ALU_CONTROL_SRA:begin
+            `ALU_SRA:begin
                 ALU_result <= src_1_data >>> src_2_data[4:0];
             end
 
             //FOR BRANCH INSTRUCTION
-            `ALU_CONTROL_BEQ:begin
+            `ALU_BEQ:begin
                 ALU_result <= (equal)? 1'b1 : 1'b0;
             end
-            `ALU_CONTROL_BNE:begin
+            `ALU_BNE:begin
                 ALU_result <= (~equal)? 1'b1 : 1'b0;
             end
-           `ALU_CONTROL_BLT:begin
+           `ALU_BLT:begin
                 ALU_result <= (signed_less_than)? 1'b1 : 1'b0;
             end
-            `ALU_CONTROL_BGE:begin
+            `ALU_BGE:begin
                 ALU_result <= (~signed_less_than)? 1'b1 : 1'b0;
             end
-            `ALU_CONTROL_BLTU:begin
+            `ALU_BLTU:begin
                 ALU_result <= (unsigned_less_than)? 1'b1 : 1'b0;
             end
-            `ALU_CONTROL_BGEU:begin
+            `ALU_BGEU:begin
                 ALU_result <= (~unsigned_less_than)? 1'b1 : 1'b0;
             end
 
             //FOR RAM OFFSET CALCULATION x[rs1] + sext(offset)
-            `ALU_CONTROL_OFFSET:begin
+            `ALU_OFFSET:begin
                 ALU_result <= src_1_data + sext_offset;
             end
             

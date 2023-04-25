@@ -26,7 +26,7 @@ module Program_counter(
         input wire          clk,                   // input clock signal
         input wire          rst,                   // reset signal
         input wire[1:0]     PC_control_sig,        // control signals
-
+        input wire[31:0]    offset,
         input wire          ALU_result,       // equality calculated by alu
 
         output reg[31:0]    pc,                    // register of program counter    

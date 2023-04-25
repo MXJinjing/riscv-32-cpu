@@ -28,23 +28,44 @@ module RISCV_CPU_top(
         output wire[31:0] data2
     );
     
-    
-        // CONTROL SIGNALS BUS
-        wire[31:0] _pc;
-        wire[31:0] _instruction;
+        assign data1 = _instruction;
+        assign data2 = _pc;
+
+
+        // CONTROL BUS
         wire[2:0]  _PC_control_sig;
         wire[5:0]  _ALU_control_sig;
         wire       reg_write_sig;
         wire[2:0]  _alu_src1_control_sig;
         wire[2:0]  _alu_src2_control_sig;
      
-        assign data1 = _instruction;
-        assign data2 = _pc;
-       
+
+        // ADDRESS BUS
+        wire[4:0]  _reg_rd_addr;
+        wire[4:0]  _reg_rs1_addr;
+        wire[4:0]  _reg_rs2_addr;
+        wire[4:0]  _reg_r1_addr;
+        wire[4:0]  _reg_r2_addr;
+        wire[4:0]  _reg_w1_addr;
+        wire[31:0] _pc;
+
+        // DATA BUS
+        wire[31:0] _instruction;
+        wire[31:0] _imm;
+        wire[31:0] _ALU_result;
+        wire[31:0] _src_1_data;
+        wire[31:0] _src_2_data;
+        wire[31:0] _reg_r1_data;
+        wire[31:0] _reg_r2_data;
+        wire[31:0] _return_addr;
+        wire[31:0] _reg_w1_data;
+        wire[31:0] _write_data;
+        
         
         Program_counter new_pc_instance(
             .clk(clk),
             .rst(rst),
+            .offset(_imm),
             .PC_control_sig(_PC_control_sig),
 
             .ALU_result(_ALU_result),
@@ -63,7 +84,7 @@ module RISCV_CPU_top(
             .opcode(_opcode),
             .funct3(_funct3),
             .funct7(_funct7),
-            .imm_32_bit(_imm_32_bit),
+            .imm(_imm),
             .reg_rd_addr(_reg_rd_addr),
             .reg_rs1_addr(_reg_rs1_addr),
             .reg_rs2_addr(_reg_rs2_addr)
@@ -89,19 +110,20 @@ module RISCV_CPU_top(
             .reg_r2_data(_reg_r2_data)
         );
 
-        Mux_alu_source1 new_mux_alu_source1_instance(
-            .alu_src1_control_sig(_alu_src1_control_sig),
-            .reg_rs1_data(_reg_rs1_data),
-            .reg_pc_data(_reg_pc_data),
+        Mux_alu_source new_mux_alu_source1_instance(
+            .alu_src_control_sig(_alu_src1_control_sig),
+            .reg_data(_reg_r1_data),
+            .pc(_pc),  
             .imm(_imm),
-            .src1(_src1)
+            .src(_src_1_data)
         );
 
-        Mux_alu_source2 new_mux_alu_source2_instance(
-            .alu_src2_control_sig(_alu_src2_control_sig),
-            .reg_rs2_data(_reg_rs2_data),
+        Mux_alu_source new_mux_alu_source2_instance(
+            .alu_src_control_sig(_alu_src2_control_sig),
+            .reg_data(_reg_r2_data),
+            .pc(_pc),  
             .imm(_imm),
-            .src2(_src2)
+            .src(_src_2_data)
         );
 
         Control_unit new_control_instance(

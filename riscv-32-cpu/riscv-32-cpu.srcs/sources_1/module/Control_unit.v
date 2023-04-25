@@ -4,8 +4,8 @@
 `include "../define/alu_control_define.vh"
 `include "../define/alu_src_control_define.vh"
 `include "../define/ls_control_define.vh"
-`include "../ram_control_define.vh"
-`include "../reg_control_define.vh"
+`include "../define/ram_control_define.vh"
+`include "../define/reg_control_define.vh"
 
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
@@ -38,7 +38,7 @@ module Control_unit(
         output wire          reg_write_sig,
         output wire          blk_mem_we_sig,
         output wire[2:0]      ALU1_source_sig,
-        output wire[2:0]      ALU2_source_sig,
+        output wire[2:0]      ALU2_source_sig
     );
     
     assign PC_control_sig = (opcode == `BRANCH_OP) ? `PC_CONTROL_BRANCH :
@@ -48,7 +48,7 @@ module Control_unit(
     assign ALU1_source_sig = (opcode == `AUIPC_OP) ? `SRC_REG_PC :
                             (opcode == `JAL_OP) ? `SRC_REG_PC :
                             (opcode == `JALR_OP) ? `SRC_REG_PC :
-                            (opcode == `LUI_OP) ? `SRC_ZERO : `SRC_REG_RS1;
+                            (opcode == `LUI_OP) ? `SRC_ZERO : `SRC_REG_RS;
 
 
 
@@ -56,8 +56,8 @@ module Control_unit(
                             (opcode == `LOAD_OP) ? `SRC_IMM :
                             (opcode == `STORE_OP) ? `SRC_IMM :
                             (opcode == `JALR_OP) ? `SRC_IMM : 
-                            (opcode == `AUIPC_OP) ? `SRC_REG_IMM :
-                            (opcode == `LUI_OP) ? `SRC_IMM : `SRC_REG_RS2;
+                            (opcode == `AUIPC_OP) ? `SRC_IMM :
+                            (opcode == `LUI_OP) ? `SRC_IMM : `SRC_REG_RS;
 
     assign reg_write_sig = (opcode == `LUI_OP) ? `REG_WRITE_ENABLE :
                             (opcode == `AUIPC_OP) ? `REG_WRITE_ENABLE :
@@ -65,9 +65,9 @@ module Control_unit(
                             (opcode == `JALR_OP) ? `REG_WRITE_ENABLE :
                             (opcode == `LOAD_OP) ? `REG_WRITE_ENABLE :
                             (opcode == `IMM_ALU_OP) ? `REG_WRITE_ENABLE :
-                            (opcode == `REG_ALU_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `REG_ALU_OP) ? `REG_WRITE_ENABLE :`REG_WRITE_DISABLE;
     
-    assign blk_mem_we_sig = (opcode == `STORE_OP) ? `MEM_WRITE_ENABLE : `MEM_WRITE_DISABLE;
+    assign blk_mem_we_sig = (opcode == `STORE_OP) ? `RAM_WRITE_ENABLE : `RAM_WRITE_DISABLE;
 
 
     assign ALU_control_sig = (opcode == `REG_ALU_OP)?
@@ -78,8 +78,8 @@ module Control_unit(
                             (funct3 == `XOR_F3)?`ALU_XOR :
                             (funct3 == `SLT_F3)?`ALU_SLT :
                             (funct3 == `SLTU_F3)?`ALU_SLTU :
-                            (funct3 == `SLL_F3)?`ALU_SLL :
-                            (funct3 == `SRA_F3)?`ALU_SRA :
+                            (funct3 == `SR_F3 && funct7 == `SRL_F7 )?`ALU_SRL :
+                            (funct3 == `SR_F3 && funct7 == `SRA_F7 )?`ALU_SRA :
                             0:
 
                             (opcode == `IMM_ALU_OP)?
@@ -90,8 +90,8 @@ module Control_unit(
                             (funct3 == `SLT_F3)?`ALU_SLT :
                             (funct3 == `SLTU_F3)?`ALU_SLTU :
                             (funct3 == `SLL_F3)?`ALU_SLL :
-                            (funct3 == `SRL_F3)?`ALU_SRL :
-                            (funct3 == `SRA_F3)?`ALU_SRA :
+                            (funct3 == `SR_F3 && funct7 == `SRL_F7 )?`ALU_SRL :
+                            (funct3 == `SR_F3 && funct7 == `SRA_F7 )?`ALU_SRA :
                             0:
 
                             (opcode == `LUI_OP)?`ALU_ADD : 

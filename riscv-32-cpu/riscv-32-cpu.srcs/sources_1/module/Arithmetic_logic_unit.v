@@ -40,8 +40,6 @@ module Arithmetic_logic_unit(
     assign equal = (src_1_data == src_2_data) ? 1'b1 : 1'b0;
     assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
     assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
-    assign sext_offset = (src_2_data[11]) ? { 20'b1111_1111_1111_1111 , src_2_data[11:0]  } :
-                           { 20'b0000_0000_0000_0000 , src_2_data[11:0]  };
 
     always @(*) begin
         case (ALU_control_sig)
@@ -110,12 +108,6 @@ module Arithmetic_logic_unit(
             `ALU_BGEU:begin
                 ALU_result <= (~unsigned_less_than)? 1'b1 : 1'b0;
             end
-
-            //FOR RAM OFFSET CALCULATION x[rs1] + sext(offset)
-            `ALU_OFFSET:begin
-                ALU_result <= src_1_data + sext_offset;
-            end
-            
             //DO NOTHING FOR OTHER INSTRUCTION
             default:begin
                 ALU_result <= 32'hffffffff;

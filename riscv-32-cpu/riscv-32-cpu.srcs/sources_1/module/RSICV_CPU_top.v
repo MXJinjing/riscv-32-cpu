@@ -60,7 +60,9 @@ module RISCV_CPU_top(
         wire[31:0] _return_addr;
         wire[31:0] _reg_w1_data;
         wire[31:0] _write_data;
-        
+        wire[31:0] _load_data;
+        wire[31:0] _save_data;
+
         
         Program_counter new_pc_instance(
             .clk(clk),
@@ -124,6 +126,13 @@ module RISCV_CPU_top(
             .pc(_pc),  
             .imm(_imm),
             .src(_src_2_data)
+        );
+
+        Mux_reg_source new_mux_reg_source_instance(
+            .reg_src_control_sig(_reg_src_control_sig),
+            .return_addr(_return_addr),
+            .ALU_result(_ALU_result),
+            .load_data(_load_data)
         );
 
         Control_unit new_control_instance(

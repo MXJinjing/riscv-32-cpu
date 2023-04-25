@@ -33,8 +33,8 @@ module RISCV_CPU_top(
 
 
         // CONTROL BUS
-        wire[2:0]  _PC_control_sig;
-        wire[5:0]  _ALU_control_sig;
+        wire[2:0]  _pc_control_sig;
+        wire[5:0]  _alu_control_sig;
         wire       reg_write_sig;
         wire[2:0]  _alu_src1_control_sig;
         wire[2:0]  _alu_src2_control_sig;
@@ -52,7 +52,7 @@ module RISCV_CPU_top(
         // DATA BUS
         wire[31:0] _instruction;
         wire[31:0] _imm;
-        wire[31:0] _ALU_result;
+        wire[31:0] _alu_result;
         wire[31:0] _src_1_data;
         wire[31:0] _src_2_data;
         wire[31:0] _reg_r1_data;
@@ -68,9 +68,9 @@ module RISCV_CPU_top(
             .clk(clk),
             .rst(rst),
             .offset(_imm),
-            .PC_control_sig(_PC_control_sig),
+            .PC_control_sig(_pc_control_sig),
 
-            .ALU_result(_ALU_result),
+            .ALU_result(_alu_result),
             .pc(_pc),
             .return_addr(_return_addr)
         );
@@ -94,10 +94,10 @@ module RISCV_CPU_top(
         
         Arithmetic_logic_unit new_alu_instance(
             .clk(clk),
-            .ALU_control_sig(_ALU_control_sig),
+            .ALU_control_sig(_alu_control_sig),
             .src_1_data(_src_1_data),
             .src_2_data(_src_2_data),
-            .ALU_result(_ALU_result),
+            .ALU_result(_alu_result),
             .overflow(_overflow)
         );
         
@@ -131,7 +131,7 @@ module RISCV_CPU_top(
         Mux_reg_source new_mux_reg_source_instance(
             .reg_src_control_sig(_reg_src_control_sig),
             .return_addr(_return_addr),
-            .ALU_result(_ALU_result),
+            .ALU_result(_alu_result),
             .load_data(_load_data)
         );
 
@@ -139,12 +139,12 @@ module RISCV_CPU_top(
             .opcode(_opcode),
             .funct3(_funct3),
             .funct7(_funct7),
-            .PC_control_sig(_PC_control_sig),
-            .ALU_control_sig(_ALU_control_sig),
+            .PC_control_sig(_pc_control_sig),
+            .ALU_control_sig(_alu_control_sig),
             .reg_write_sig(_reg_write_sig),
             .blk_mem_we_sig(_blk_mem_we_sig),
-            .ALU1_source_sig(_alu_src1_control_sig),
-            .ALU2_source_sig(_alu_src2_control_sig)
+            .ALU_src1_sig(_alu_src1_control_sig),
+            .ALU_src2_sig(_alu_src2_control_sig)
         );
         
 

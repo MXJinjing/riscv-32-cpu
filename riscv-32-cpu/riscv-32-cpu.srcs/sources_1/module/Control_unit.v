@@ -37,22 +37,22 @@ module Control_unit(
         output wire[3:0]     ALU_control_sig,
         output wire          reg_write_sig,
         output wire          blk_mem_we_sig,
-        output wire[2:0]      ALU1_source_sig,
-        output wire[2:0]      ALU2_source_sig
+        output wire[2:0]      ALU_src1_sig,
+        output wire[2:0]      ALU_src2_sig
     );
     
     assign PC_control_sig = (opcode == `BRANCH_OP) ? `PC_CONTROL_BRANCH :
                             (opcode == `JAL_OP) ? `PC_CONTROL_JAL :
                             (opcode == `JALR_OP) ? `PC_CONTROL_JALR : `PC_NEXT;
 
-    assign ALU1_source_sig = (opcode == `AUIPC_OP) ? `SRC_REG_PC :
+    assign ALU_src1_sig = (opcode == `AUIPC_OP) ? `SRC_REG_PC :
                             (opcode == `JAL_OP) ? `SRC_REG_PC :
                             (opcode == `JALR_OP) ? `SRC_REG_PC :
                             (opcode == `LUI_OP) ? `SRC_ZERO : `SRC_REG_RS;
 
 
 
-    assign ALU2_source_sig = (opcode == `IMM_ALU_OP) ? `SRC_IMM : 
+    assign ALU_src2_sig = (opcode == `IMM_ALU_OP) ? `SRC_IMM : 
                             (opcode == `LOAD_OP) ? `SRC_IMM :
                             (opcode == `STORE_OP) ? `SRC_IMM :
                             (opcode == `JALR_OP) ? `SRC_IMM : 

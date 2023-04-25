@@ -36,32 +36,38 @@ module Instruction_decoder(
         output wire[4:0]             reg_rs2_addr         // register rs2 address  
     );
 
-    assign opcode = instruction[6:0];           
-    assign funct3 = instruction[14:12];         
-    assign funct7 = instruction[31:25];         
-
-    assign reg_rd_addr = instruction[11:7];
-    assign reg_rs1_addr = instruction[19:15];
-    assign reg_rs2_addr = instruction[24:20];     
 
     // to determine the instruction type
-    assign R_type = (opcode == `REG_ALU_OP ? 1'b1 : 1'b0);
-    assign I_type = (opcode == `IMM_ALU_OP|| opcode == `LOAD_OP|| opcode == `SYNCH_OP|| opcode == `ENV_OP|| opcode == `CSR_OP|| opcode == `JALR_OP) ? 1'b1 : 1'b0;
-    assign S_type = (opcode == `STORE_OP ? 1'b1 : 1'b0);
-    assign B_type = (opcode == `BRANCH_OP ? 1'b1 : 1'b0);
-    assign U_type = (opcode == `LUI_OP|| opcode == `AUIPC_OP ? 1'b1 : 1'b0);
-    assign J_type = (opcode == `JAL_OP ? 1'b1 : 1);
+    assign R_type = (opcode == `REG_ALU_OP);
+    assign I_type = (opcode == `IMM_ALU_OP|| opcode == `LOAD_OP|| opcode == `SYNCH_OP|| opcode == `ENV_OP|| opcode == `CSR_OP|| opcode == `JALR_OP);
+    assign S_type = (opcode == `STORE_OP );
+    assign B_type = (opcode == `BRANCH_OP);
+    assign U_type = (opcode == `LUI_OP || opcode == `AUIPC_OP );
+    assign J_type = (opcode == `JAL_OP);
 
+
+    assign opcode = instruction[6:0];           
+    assign funct3 = (R_type || I_type || S_type || B_type) ? instruction[14:12]: 3'b0;  // funct3 is not used in U and J type 
+    assign funct7 = R_type ? instruction[31:25]: 7'b0;  // funct7 is not used in I, S, B, U and J type
+    assign reg_rd_addr = (R_type || I_type || U_type || J_type) ? instruction[11:7]: 5'b0;  // rd is not used in S and B type (STORE and BRANCH
+    assign reg_rs1_addr = (R_type || I_type || S_type || B_type) ? instruction[19:15]: 5'b0;  // rs1 is not used in U and J type (JALR)
+    assign reg_rs2_addr = (R_type || S_type || B_type) ? instruction[24:20]: 5'b0;  // rs2 is not used in I and U type
+
+    wire[31:0] I_imm;
+    wire[31:0] S_imm;
+    wire[31:0] B_imm;
+    wire[31:0] U_imm;
+    wire[31:0] J_imm;
+    
 
     // Decode the instruction for each type
-    
     assign I_imm = {{21{instruction[31]}},instruction[30:25],instruction[24:21],instruction[20]};
     assign S_imm = {{21{instruction[31]}},instruction[30:25],instruction[11:8],instruction[7]};
     assign B_imm = {{20{instruction[31]}},instruction[7],instruction[30:25],instruction[11:8],1'b0};
     assign U_imm = {instruction[31],instruction[30:20],instruction[19:12],12'b0};
     assign J_imm = {{12{instruction[31]}},instruction[19:12],instruction[20],instruction[30:25],instruction[24:21],1'b0};
       
-    assign imm =I_type ? I_imm:
+    assign imm = I_type ? I_imm:
                        S_type ? S_imm:
                        B_type ? B_imm:
                        U_type ? U_imm:

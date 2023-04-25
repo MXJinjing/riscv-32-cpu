@@ -42,9 +42,9 @@ module Mux_lenth(
     assign data_unsigned_half = { 16'h0000, data_32_bit[15:0] };
     assign data_unsigned_byte = { 24'h000000, data_32_bit[7:0] };
 
-    assign data_out = (ls_lenth_sig == `L_MUX_W) ? data_signed_word:
-                    (ls_lenth_sig == `L_MUX_H ) ? data_signed_half:
-                    (ls_lenth_sig == `L_MUX_HU) ? data_unsigned_half:
-                    (ls_lenth_sig == `L_MUX_B ) ? data_signed_byte:
-                    (ls_lenth_sig == `L_MUX_BU) ? data_unsigned_byte : 32'h00000000;
+    assign data_out = (mux_lenth_sig == `L_MUX_W) ? data_signed_word:
+                    (mux_lenth_sig == `L_MUX_H ) ? data_signed_half:
+                    (mux_lenth_sig == `L_MUX_HU) ? data_unsigned_half:
+                    (mux_lenth_sig == `L_MUX_B ) ? data_signed_byte:
+                    (mux_lenth_sig == `L_MUX_BU) ? data_unsigned_byte : 32'h00000000;
 endmodule

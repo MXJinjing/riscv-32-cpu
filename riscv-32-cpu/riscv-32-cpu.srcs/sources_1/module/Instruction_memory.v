@@ -23,11 +23,17 @@
 module Instruction_memory (
     input wire clk,
     input wire [31:0] pc,           //pc address
-    output wire [31:0] Dout         //instruction out
+    output reg [31:0] instruction         //instruction out
     );
     //reg [3:0] flag;
     
-    blk_mem_gen_0 uut(.clka(clk),.addra(pc[11:1]),.douta(Dout));
+    wire[31:0] _douta;
+    blk_mem_gen_0 uut(.clka(clk),.addra(pc[12:2]),.douta(_douta));
+
+    always @(posedge clk) begin
+        instruction <= _douta;
+    end
+    
     
 endmodule
 

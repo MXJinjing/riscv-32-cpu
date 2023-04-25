@@ -3,7 +3,7 @@
 `include "../define/pc_control_define.vh"
 `include "../define/alu_control_define.vh"
 `include "../define/alu_src_control_define.vh"
-`include "../define/ls_control_define.vh"
+`include "../define/lenth_control_define.vh"
 `include "../define/ram_control_define.vh"
 `include "../define/reg_control_define.vh"
 
@@ -34,7 +34,7 @@ module Control_unit(
         input wire[6:0]      funct7,
 
         output wire[3:0]     PC_control_sig,
-        output wire[3:0]     ALU_control_sig,
+        output wire[4:0]     ALU_control_sig,
         output wire          reg_write_sig,
         output wire          blk_mem_we_sig,
         output wire[2:0]      ALU_src1_sig,
@@ -49,8 +49,6 @@ module Control_unit(
                             (opcode == `JAL_OP) ? `SRC_REG_PC :
                             (opcode == `JALR_OP) ? `SRC_REG_PC :
                             (opcode == `LUI_OP) ? `SRC_ZERO : `SRC_REG_RS;
-
-
 
     assign ALU_src2_sig = (opcode == `IMM_ALU_OP) ? `SRC_IMM : 
                             (opcode == `LOAD_OP) ? `SRC_IMM :

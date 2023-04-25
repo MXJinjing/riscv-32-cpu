@@ -41,7 +41,7 @@ module Arithmetic_logic_unit(
     assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
     assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
 
-    always @(*) begin
+    always @(negedge clk) begin
         case (ALU_control_sig)
 
             //FOR ARITHMETIC INSTRUCTION

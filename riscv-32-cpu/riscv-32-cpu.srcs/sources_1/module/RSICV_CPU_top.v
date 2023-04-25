@@ -24,29 +24,61 @@ module RISCV_CPU_top(
         input wire rst,
         input wire clk,
         
-        output wire[31:0] data1,
-        output wire[31:0] data2
+        
+        wire[6:0]  out_opcode,
+        wire[2:0]  out_funct3,
+        wire[6:0]  out_funct7,
+        //wire[2:0]  out_pc_control_sig,
+        wire[4:0]  out_alu_control_sig,
+        //wire       out_reg_write_sig,
+        wire[2:0]  out_alu_src1_control_sig,
+        wire[2:0]  out_alu_src2_control_sig,
+        //wire[2:0]  out_reg_src_control_sig,
+        wire[4:0]  out_reg_rd_addr,
+        wire[4:0]  out_reg_rs1_addr,
+        wire[4:0]  out_reg_rs2_addr,
+        //wire[4:0]  out_reg_rs1_addr,
+        //wire[4:0]  out_reg_rs2_addr,
+        //wire[4:0]  out_reg_rd_addr,
+        wire[31:0] out_pc,
+        wire[31:0] out_instruction,
+        wire[31:0] out_imm,
+        wire[31:0] out_alu_result,
+        wire[31:0] out_src_1_data,
+        wire[31:0] out_src_2_data,
+        wire[31:0] out_reg_rs1_data,
+        wire[31:0] out_reg_rs2_data//,
+        //wire[31:0] out_return_addr,
+        //wire[31:0] out_reg_rd_data,
+        //wire[31:0] out_write_data,
+        //wire[31:0] out_load_data,
+        //wire[31:0] out_save_data
+
     );
     
-        assign data1 = _instruction;
-        assign data2 = _pc;
 
 
         // CONTROL BUS
+        wire[6:0]  _opcode;
+        wire[2:0]  _funct3;
+        wire[6:0]  _funct7;
+
         wire[2:0]  _pc_control_sig;
-        wire[5:0]  _alu_control_sig;
-        wire       reg_write_sig;
+        wire[4:0]  _alu_control_sig;
+        wire       _reg_write_sig;
         wire[2:0]  _alu_src1_control_sig;
         wire[2:0]  _alu_src2_control_sig;
+        wire[2:0]  _reg_src_control_sig;
+
      
 
         // ADDRESS BUS
         wire[4:0]  _reg_rd_addr;
         wire[4:0]  _reg_rs1_addr;
         wire[4:0]  _reg_rs2_addr;
-        wire[4:0]  _reg_r1_addr;
-        wire[4:0]  _reg_r2_addr;
-        wire[4:0]  _reg_w1_addr;
+        wire[4:0]  _reg_rs1_addr;
+        wire[4:0]  _reg_rs2_addr;
+        wire[4:0]  _reg_rd_addr;
         wire[31:0] _pc;
 
         // DATA BUS
@@ -55,13 +87,45 @@ module RISCV_CPU_top(
         wire[31:0] _alu_result;
         wire[31:0] _src_1_data;
         wire[31:0] _src_2_data;
-        wire[31:0] _reg_r1_data;
-        wire[31:0] _reg_r2_data;
+        wire[31:0] _reg_rs1_data;
+        wire[31:0] _reg_rs2_data;
         wire[31:0] _return_addr;
-        wire[31:0] _reg_w1_data;
+        wire[31:0] _reg_rd_data;
         wire[31:0] _write_data;
         wire[31:0] _load_data;
         wire[31:0] _save_data;
+
+        assign out_opcode = _opcode;
+        assign out_funct3 = _funct3;
+        assign out_funct7 = _funct7;
+        assign out_pc_control_sig = _pc_control_sig;
+        assign out_alu_control_sig = _alu_control_sig;
+        assign out_reg_write_sig = _reg_write_sig;
+        assign out_alu_src1_control_sig = _alu_src1_control_sig;
+        assign out_alu_src2_control_sig = _alu_src2_control_sig;
+        assign out_reg_src_control_sig = _reg_src_control_sig;
+        
+        assign out_reg_rd_addr = _reg_rd_addr;
+        assign out_reg_rs1_addr = _reg_rs1_addr;
+        assign out_reg_rs2_addr = _reg_rs2_addr;
+        assign out_reg_rs1_addr = _reg_rs1_addr;
+        assign out_reg_rs2_addr = _reg_rs2_addr;
+        assign out_reg_rd_addr = _reg_rd_addr;
+        assign out_pc = _pc;
+
+        assign out_instruction = _instruction;
+        assign out_imm = _imm;
+        assign out_alu_result = _alu_result;
+        assign out_src_1_data = _src_1_data;
+        assign out_src_2_data = _src_2_data;
+        assign out_reg_rs1_data = _reg_rs1_data;
+        assign out_reg_rs2_data = _reg_rs2_data;
+        assign out_return_addr = _return_addr;
+        assign out_reg_rd_data = _reg_rd_data;
+        assign out_write_data = _write_data;
+        assign out_load_data = _load_data;
+        assign out_save_data = _save_data;
+
 
         
         Program_counter new_pc_instance(
@@ -78,7 +142,7 @@ module RISCV_CPU_top(
         Instruction_memory new_im_instance(
             .clk(clk),
             .pc(_pc),
-            .Dout(_instruction)
+            .instruction(_instruction)
         );
         
         Instruction_decoder new_id_intance(
@@ -104,17 +168,17 @@ module RISCV_CPU_top(
         Register_bank new_regbank_instance(
             .clk(clk),
             .reg_write_sig(_reg_write_sig),
-            .reg_r1_addr(_reg_r1_addr),
-            .reg_r2_addr(_reg_r2_addr),
-            .reg_w1_addr(_reg_w1_addr),
+            .reg_rs1_addr(_reg_rs1_addr),
+            .reg_rs2_addr(_reg_rs2_addr),
+            .reg_rd_addr(_reg_rd_addr),
             .write_data(_write_data),
-            .reg_r1_data(_reg_r1_data),
-            .reg_r2_data(_reg_r2_data)
+            .reg_rs1_data(_reg_rs1_data),
+            .reg_rs2_data(_reg_rs2_data)
         );
 
         Mux_alu_source new_mux_alu_source1_instance(
             .alu_src_control_sig(_alu_src1_control_sig),
-            .reg_data(_reg_r1_data),
+            .reg_data(_reg_rs1_data),
             .pc(_pc),  
             .imm(_imm),
             .src(_src_1_data)
@@ -122,7 +186,7 @@ module RISCV_CPU_top(
 
         Mux_alu_source new_mux_alu_source2_instance(
             .alu_src_control_sig(_alu_src2_control_sig),
-            .reg_data(_reg_r2_data),
+            .reg_data(_reg_rs2_data),
             .pc(_pc),  
             .imm(_imm),
             .src(_src_2_data)

@@ -32,8 +32,8 @@ module Register_bank(
         
         input wire[31:0] write_data,          //date to be written to the register
         
-        output wire[31:0] reg_1_data,         //data that read from the first register
-        output wire[31:0] reg_2_data,         //data that read from the second register
+        output wire[31:0] reg_r1_data,         //data that read from the first register
+        output wire[31:0] reg_r2_data,         //data that read from the second register
         
         output wire debug
     );

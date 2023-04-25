@@ -47,13 +47,8 @@ module decoder_test(
 
     
     initial begin
-        instruction <= 32'b00000000001100010000000010110011;
         #10
-        instruction <= 32'b00000100000000000000000000010011;
-        #10
-        instruction <= 32'b00000000010000000000000011101111;
-        #10
-        instruction <= 32'b00000000010000011100000101100011;
+        instruction <= 32'b100001001011010011010010011;
     end
 
 endmodule

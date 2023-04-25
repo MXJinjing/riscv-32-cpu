@@ -22,14 +22,12 @@
 
 module Instruction_memory (
     input wire clk,
-    input wire [31:0] PC,           //pc address
+    input wire [31:0] pc,           //pc address
     output wire [31:0] Dout         //instruction out
     );
     //reg [3:0] flag;
-    wire[31:0] mem_address;
-    assign mem_address = { 1'b0, {PC[31:1]} } ;
     
-    blk_mem_gen_0 uut(.clka(clk),.addra(mem_address[10:0]),.douta(Dout));
+    blk_mem_gen_0 uut(.clka(clk),.addra(pc[11:1]),.douta(Dout));
     
 endmodule
 

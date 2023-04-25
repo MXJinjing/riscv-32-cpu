@@ -26,24 +26,18 @@ module Program_counter(
         input wire          clk,                   // input clock signal
         input wire          rst,                   // reset signal
         input wire[1:0]     PC_control_sig,        // control signals
-        input wire[20:0]    offset,                // offset 20bit
-        input wire[31:0]    reg_rs1_data,          // register rs1 
-        input wire          ALU_result_1bit,       // equality calculated by alu
+
+        input wire          ALU_result,       // equality calculated by alu
 
         output reg[31:0]    pc,                    // register of program counter    
-        output reg[31:0]    reg_rd_addr            // return address
+        output reg[31:0]    return_addr            // return address
     );
 
     wire[31:0]  current_pc;           // current pc
     assign current_pc = pc;           // update current_pc from result
-    
-    wire[31:0]  sign_extended_12;
-    wire[31:0]  sign_extended_20;
+
     wire[31:0]  pc_add_4;
     
-    assign sign_extended_11 =(offset[11])? { 19'b1111_1111_1111_1111_1111 , offset[11:0], 1'b1 }:{ 19'b0000_0000_0000_0000_0000 , offset[11:0], 1'b1 };
-    assign sign_extended_12 =(offset[12])? { 19'b1111_1111_1111_1111_1111 , offset[12:1], 1'b1 }:{ 19'b0000_0000_0000_0000_0000 , offset[12:1], 1'b1 };
-    assign sign_extended_20 =(offset[20])? { 11'b1111_1111_1111 , offset[20:1] ,1'b1 }:{ 11'b0000_0000_0000 , offset[20:1] ,1'b1 };
     assign pc_add_4 = current_pc + 32'd4;
     
     always @ (posedge clk) begin
@@ -56,15 +50,15 @@ module Program_counter(
                 pc <= pc_add_4;
             end
             `PC_CONTROL_BRANCH:begin
-                pc <= (ALU_result_1bit)? current_pc + sign_extended_12 : pc_add_4;
+                pc <= ALU_result ? current_pc + offset : pc_add_4;
             end
             `PC_CONTROL_JALR:begin
-                reg_rd_addr <= current_pc +  32'd4;
-                pc <= (reg_rs1_data + sign_extended_11) & 32'hfffffffe;
+                return_addr <= current_pc +  32'd4;
+                pc <= ALU_result & 32'hfffffffe;
             end
             `PC_CONTROL_JAL:begin
-                reg_rd_addr <= current_pc + 32'd4;
-                pc <= current_pc + sign_extended_20;
+                return_addr <= current_pc + 32'd4;
+                pc <= ALU_result;
             end
             default:begin
                 pc <= pc_add_4;

@@ -37,12 +37,83 @@ module Control_unit(
         output wire[3:0]     ALU_control_sig,
         output wire          reg_write_sig,
         output wire          blk_mem_we_sig,
-        output wire          mux_lenth_ls_sig,
-        output wire          mux_lenth_jalr_sig,
-        output wire[2:0]      ALU_source_sig
+        output wire[2:0]      ALU1_source_sig,
+        output wire[2:0]      ALU2_source_sig,
     );
     
-    
-    
+    assign PC_control_sig = (opcode == `BRANCH_OP) ? `PC_CONTROL_BRANCH :
+                            (opcode == `JAL_OP) ? `PC_CONTROL_JAL :
+                            (opcode == `JALR_OP) ? `PC_CONTROL_JALR : `PC_NEXT;
 
+    assign ALU1_source_sig = (opcode == `AUIPC_OP) ? `SRC_REG_PC :
+                            (opcode == `JAL_OP) ? `SRC_REG_PC :
+                            (opcode == `JALR_OP) ? `SRC_REG_PC :
+                            (opcode == `LUI_OP) ? `SRC_ZERO : `SRC_REG_RS1;
+
+
+
+    assign ALU2_source_sig = (opcode == `IMM_ALU_OP) ? `SRC_IMM : 
+                            (opcode == `LOAD_OP) ? `SRC_IMM :
+                            (opcode == `STORE_OP) ? `SRC_IMM :
+                            (opcode == `JALR_OP) ? `SRC_IMM : 
+                            (opcode == `AUIPC_OP) ? `SRC_REG_IMM :
+                            (opcode == `LUI_OP) ? `SRC_IMM : `SRC_REG_RS2;
+
+    assign reg_write_sig = (opcode == `LUI_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `AUIPC_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `JAL_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `JALR_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `LOAD_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `IMM_ALU_OP) ? `REG_WRITE_ENABLE :
+                            (opcode == `REG_ALU_OP) ? `REG_WRITE_ENABLE :
+    
+    assign blk_mem_we_sig = (opcode == `STORE_OP) ? `MEM_WRITE_ENABLE : `MEM_WRITE_DISABLE;
+
+
+    assign ALU_control_sig = (opcode == `REG_ALU_OP)?
+                            (funct3 == `ADD_F3 && funct7 ==  0     )?`ALU_ADD :
+                            (funct3 == `ADD_F3 && funct7 == `SUB_F7)?`ALU_SUB :
+                            (funct3 == `AND_F3)?`ALU_AND :
+                            (funct3 == `OR_F3)?`ALU_OR :
+                            (funct3 == `XOR_F3)?`ALU_XOR :
+                            (funct3 == `SLT_F3)?`ALU_SLT :
+                            (funct3 == `SLTU_F3)?`ALU_SLTU :
+                            (funct3 == `SLL_F3)?`ALU_SLL :
+                            (funct3 == `SRA_F3)?`ALU_SRA :
+                            0:
+
+                            (opcode == `IMM_ALU_OP)?
+                            (funct3 == `ADD_F3 )?`ALU_ADD :
+                            (funct3 == `AND_F3)?`ALU_AND :
+                            (funct3 == `OR_F3)?`ALU_OR :
+                            (funct3 == `XOR_F3)?`ALU_XOR :
+                            (funct3 == `SLT_F3)?`ALU_SLT :
+                            (funct3 == `SLTU_F3)?`ALU_SLTU :
+                            (funct3 == `SLL_F3)?`ALU_SLL :
+                            (funct3 == `SRL_F3)?`ALU_SRL :
+                            (funct3 == `SRA_F3)?`ALU_SRA :
+                            0:
+
+                            (opcode == `LUI_OP)?`ALU_ADD : 
+
+                            (opcode == `AUIPC_OP)?`ALU_ADD :
+
+                            (opcode == `LOAD_OP)?`ALU_ADD :
+
+                            (opcode == `STORE_OP)?`ALU_ADD :
+
+                            (opcode == `BRANCH_OP)?
+                            (funct3 == `BEQ_F3)?`ALU_BEQ :
+                            (funct3 == `BNE_F3)?`ALU_BNE :
+                            (funct3 == `BLT_F3)?`ALU_BLT :
+                            (funct3 == `BGE_F3)?`ALU_BGE :
+                            (funct3 == `BLTU_F3)?`ALU_BLTU :
+                            (funct3 == `BGEU_F3)?`ALU_BGEU :
+                            0:
+
+                            (opcode == `JAL_OP)?`ALU_ADD :
+                            
+                            (opcode == `JALR_OP)?`ALU_ADD : 0;
+
+       
 endmodule

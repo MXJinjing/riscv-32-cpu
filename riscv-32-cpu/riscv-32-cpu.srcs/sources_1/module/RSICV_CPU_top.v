@@ -29,12 +29,16 @@ module RISCV_CPU_top(
     );
     
     
+        // CONTROL SIGNALS BUS
         wire[31:0] _pc;
         wire[31:0] _instruction;
         wire[2:0]  _PC_control_sig;
+        wire[5:0]  _ALU_control_sig;
+        wire       reg_write_sig;
+        wire[2:0]  _alu_src1_control_sig;
+        wire[2:0]  _alu_src2_control_sig;
      
         assign data1 = _instruction;
-        assign _PC_control_sig = 3'b000;
         assign data2 = _pc;
        
         
@@ -42,16 +46,15 @@ module RISCV_CPU_top(
             .clk(clk),
             .rst(rst),
             .PC_control_sig(_PC_control_sig),
-            .offset(_offset),
-            .reg_rs1_data(_reg_rs1_data),
-            .ALU_result_1bit(_ALU_result_1bit),
+
+            .ALU_result(_ALU_result),
             .pc(_pc),
-            .reg_rd_addr(_reg_rd_addr)
+            .return_addr(_return_addr)
         );
         
         Instruction_memory new_im_instance(
             .clk(clk),
-            .PC(_pc),
+            .pc(_pc),
             .Dout(_instruction)
         );
         
@@ -78,11 +81,41 @@ module RISCV_CPU_top(
         Register_bank new_regbank_instance(
             .clk(clk),
             .reg_write_sig(_reg_write_sig),
-            .reg_1_addr(_reg_1_addr),
-            .reg_2_addr(_reg_2_addr),
+            .reg_r1_addr(_reg_r1_addr),
+            .reg_r2_addr(_reg_r2_addr),
+            .reg_w1_addr(_reg_w1_addr),
             .write_data(_write_data),
-            .reg_1_data(_reg_1_data),
-            .reg_2_data(_reg_2_data)
+            .reg_r1_data(_reg_r1_data),
+            .reg_r2_data(_reg_r2_data)
+        );
+
+        Mux_alu_source1 new_mux_alu_source1_instance(
+            .alu_src1_control_sig(_alu_src1_control_sig),
+            .reg_rs1_data(_reg_rs1_data),
+            .reg_pc_data(_reg_pc_data),
+            .imm(_imm),
+            .src1(_src1)
+        );
+
+        Mux_alu_source2 new_mux_alu_source2_instance(
+            .alu_src2_control_sig(_alu_src2_control_sig),
+            .reg_rs2_data(_reg_rs2_data),
+            .imm(_imm),
+            .src2(_src2)
+        );
+
+        Control_unit new_control_instance(
+            .opcode(_opcode),
+            .funct3(_funct3),
+            .funct7(_funct7),
+            .PC_control_sig(_PC_control_sig),
+            .ALU_control_sig(_ALU_control_sig),
+            .reg_write_sig(_reg_write_sig),
+            .blk_mem_we_sig(_blk_mem_we_sig),
+            .ALU1_source_sig(_alu_src1_control_sig),
+            .ALU2_source_sig(_alu_src2_control_sig)
         );
         
+
+
 endmodule

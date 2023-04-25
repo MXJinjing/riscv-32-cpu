@@ -21,16 +21,30 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Mux_alu_source(
-        input wire[2:0] alu_src_control_sig,
+module Mux_alu_source1(
+        input wire[2:0] alu_src1_control_sig,
+        input wire[31:0] reg_rs1_data,
+        input wire[31:0] reg_pc_data,   
+        input wire[31:0] imm,
+        output wire[31:0] src2
+    );
+    
+    assign src2 = (alu_src1_control_sig == `SRC_REG_RS1) ? reg_rs1_data:
+                (alu_src1_control_sig == `SRC_REG_PC) ? reg_pc_data:
+                (alu_src1_control_sig == `SRC_IMM) ? imm : 32'h00000000;
+
+endmodule
+
+module Mux_alu_source2(
+        input wire[2:0] alu_src2_control_sig,
         input wire[31:0] reg_rs2_data,
         input wire[31:0] reg_pc_data,   
         input wire[31:0] imm,
         output wire[31:0] src2
     );
     
-    assign src2 = (alu_src_control_sig == `SRC_REG_RS2) ? reg_rs2_data:
-                (alu_src_control_sig == `SRC_REG_PC) ? reg_pc_data:
-                (alu_src_control_sig == `SRC_IMM) ? imm : 32'h00000000;
+    assign src2 = (alu_src2_control_sig == `SRC_REG_RS2) ? reg_rs2_data:
+                (alu_src2_control_sig == `SRC_REG_PC) ? reg_pc_data:
+                (alu_src2_control_sig == `SRC_IMM) ? imm : 32'h00000000;
 
 endmodule

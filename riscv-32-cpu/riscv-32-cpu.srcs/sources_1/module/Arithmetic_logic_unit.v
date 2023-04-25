@@ -93,22 +93,22 @@ module Arithmetic_logic_unit(
 
             //FOR BRANCH INSTRUCTION
             `ALU_CONTROL_BEQ:begin
-                ALU_result[0] <= (equal)? 1'b1 : 1'b0;
+                ALU_result <= (equal)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BNE:begin
-                ALU_result[0] <= (~equal)? 1'b1 : 1'b0;
+                ALU_result <= (~equal)? 1'b1 : 1'b0;
             end
            `ALU_CONTROL_BLT:begin
-                ALU_result[0] <= (signed_less_than)? 1'b1 : 1'b0;
+                ALU_result <= (signed_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BGE:begin
-                ALU_result[0] <= (~signed_less_than)? 1'b1 : 1'b0;
+                ALU_result <= (~signed_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BLTU:begin
-                ALU_result[0] <= (unsigned_less_than)? 1'b1 : 1'b0;
+                ALU_result <= (unsigned_less_than)? 1'b1 : 1'b0;
             end
             `ALU_CONTROL_BGEU:begin
-                ALU_result[0] <= (~unsigned_less_than)? 1'b1 : 1'b0;
+                ALU_result <= (~unsigned_less_than)? 1'b1 : 1'b0;
             end
 
             //FOR RAM OFFSET CALCULATION x[rs1] + sext(offset)

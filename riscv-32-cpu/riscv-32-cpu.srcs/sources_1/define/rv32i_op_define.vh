@@ -2,6 +2,9 @@
 //Funct3:     XX_F3    
 //Funct7:     XX_F7
 
+
+//Do nothing
+
 //-=-=-=-=-=-SRC-=-=-=-=-=-=-=-
 `define IMM_ALU_OP        7'b0010011       //aka I-type
 `define REG_ALU_OP        7'b0110011       //aka R-type
@@ -15,8 +18,7 @@
 
 //-=-=-=-=-Arithmetic-=-=-=-=-
 `define ADD_F3         3'b000              //addition
-`define SUB_F3         3'b000              //subtraction
-`define SUB_CST        7'b0100000          //subtraction constant
+`define SUB_F7        7'b0100000          //subtraction constant
     
 `define LUI_OP      7'b0110111             //load upper immediate
 `define AUIPC_OP    7'b0010111             //add upper immediate to pc

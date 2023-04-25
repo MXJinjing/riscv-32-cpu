@@ -22,7 +22,7 @@
 
 
 module Mux_lenth(
-        input wire[2:0]      ls_lenth_sig,
+        input wire[2:0]      mux_lenth_sig,
         input wire[31:0]     data_32_bit,      // M[x[rs1] + sext(offset)]
 
         output wire[31:0]    data_out

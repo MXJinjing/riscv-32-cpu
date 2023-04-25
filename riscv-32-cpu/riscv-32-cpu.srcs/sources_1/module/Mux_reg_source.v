@@ -22,15 +22,15 @@
 
 
 module Mux_reg_source(
-        input wire[2:0] reg_src_control_sig,
+        input wire[2:0] reg_src_sig,
         input wire[31:0] return_addr,
         input wire[31:0] ALU_result,
         input wire[31:0] load_data,
         output wire[31:0] src
     );
     
-    assign src = (reg_src_control_sig == `SRC_RETURN_ADDR) ? return_addr :
-                (reg_src_control_sig == `SRC_ALU) ? ALU_result:
-                (reg_src_control_sig == `SRC_LOAD) ? return_addr : 32'h00000000;
+    assign src = (reg_src_sig == `SRC_RETURN_ADDR) ? return_addr :
+                (reg_src_sig == `SRC_ALU) ? ALU_result:
+                (reg_src_sig == `SRC_LOAD) ? return_addr : 32'h00000000;
 
 endmodule

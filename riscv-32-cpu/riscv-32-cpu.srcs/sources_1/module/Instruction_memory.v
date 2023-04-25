@@ -30,11 +30,14 @@ module Instruction_memory (
     wire[31:0] _douta;
     blk_mem_gen_0 uut(.clka(clk),.addra(pc[12:2]),.douta(_douta));
 
-    always @(posedge clk) begin
+    always @(pc) begin
         instruction <= _douta;
     end
     
-    
+    initial begin
+        instruction <= 0;
+    end
+
 endmodule
 
 

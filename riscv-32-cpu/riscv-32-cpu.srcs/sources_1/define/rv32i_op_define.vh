@@ -1,4 +1,4 @@
-//Opcode:     XX_OP
+//Opcode:     XX_OP  9
 //Funct3:     XX_F3    
 //Funct7:     XX_F7
 

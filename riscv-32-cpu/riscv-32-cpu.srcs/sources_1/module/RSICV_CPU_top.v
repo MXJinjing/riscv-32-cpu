@@ -33,13 +33,11 @@ module RISCV_CPU_top(
         //wire       out_reg_write_sig,
         wire[2:0]  out_alu_src1_control_sig,
         wire[2:0]  out_alu_src2_control_sig,
-        //wire[2:0]  out_reg_src_control_sig,
+        //wire[2:0]  out_reg_src_sig,
         wire[4:0]  out_reg_rd_addr,
         wire[4:0]  out_reg_rs1_addr,
         wire[4:0]  out_reg_rs2_addr,
-        //wire[4:0]  out_reg_rs1_addr,
-        //wire[4:0]  out_reg_rs2_addr,
-        //wire[4:0]  out_reg_rd_addr,
+
         wire[31:0] out_pc,
         wire[31:0] out_instruction,
         wire[31:0] out_imm,
@@ -47,12 +45,13 @@ module RISCV_CPU_top(
         wire[31:0] out_src_1_data,
         wire[31:0] out_src_2_data,
         wire[31:0] out_reg_rs1_data,
-        wire[31:0] out_reg_rs2_data//,
+        wire[31:0] out_reg_rs2_data,
         //wire[31:0] out_return_addr,
         //wire[31:0] out_reg_rd_data,
-        //wire[31:0] out_write_data,
+        wire[31:0] out_write_data//,
         //wire[31:0] out_load_data,
         //wire[31:0] out_save_data
+        
 
     );
     
@@ -68,7 +67,7 @@ module RISCV_CPU_top(
         wire       _reg_write_sig;
         wire[2:0]  _alu_src1_control_sig;
         wire[2:0]  _alu_src2_control_sig;
-        wire[2:0]  _reg_src_control_sig;
+        wire[2:0]  _reg_src_sig;
 
      
 
@@ -103,7 +102,7 @@ module RISCV_CPU_top(
         assign out_reg_write_sig = _reg_write_sig;
         assign out_alu_src1_control_sig = _alu_src1_control_sig;
         assign out_alu_src2_control_sig = _alu_src2_control_sig;
-        assign out_reg_src_control_sig = _reg_src_control_sig;
+        assign out_reg_src_sig = _reg_src_sig;
         
         assign out_reg_rd_addr = _reg_rd_addr;
         assign out_reg_rs1_addr = _reg_rs1_addr;
@@ -155,6 +154,17 @@ module RISCV_CPU_top(
             .reg_rs1_addr(_reg_rs1_addr),
             .reg_rs2_addr(_reg_rs2_addr)
         );
+
+        Register_bank new_reg_instance(
+            .clk(clk),                       
+            .reg_write_sig(_reg_write_sig),             
+            .reg_rs1_addr(_reg_rs1_addr),
+            .reg_rs2_addr(_reg_rs2_addr),
+            .reg_rd_addr(_reg_rd_addr), 
+            .write_data(_write_data), 
+            .reg_rs1_data(_reg_rs1_data),
+            .reg_rs2_data(_reg_rs2_data)
+        );
         
         Arithmetic_logic_unit new_alu_instance(
             .clk(clk),
@@ -165,17 +175,6 @@ module RISCV_CPU_top(
             .overflow(_overflow)
         );
         
-        Register_bank new_regbank_instance(
-            .clk(clk),
-            .reg_write_sig(_reg_write_sig),
-            .reg_rs1_addr(_reg_rs1_addr),
-            .reg_rs2_addr(_reg_rs2_addr),
-            .reg_rd_addr(_reg_rd_addr),
-            .write_data(_write_data),
-            .reg_rs1_data(_reg_rs1_data),
-            .reg_rs2_data(_reg_rs2_data)
-        );
-
         Mux_alu_source new_mux_alu_source1_instance(
             .alu_src_control_sig(_alu_src1_control_sig),
             .reg_data(_reg_rs1_data),
@@ -193,13 +192,15 @@ module RISCV_CPU_top(
         );
 
         Mux_reg_source new_mux_reg_source_instance(
-            .reg_src_control_sig(_reg_src_control_sig),
+            .reg_src_sig(_reg_src_sig),
             .return_addr(_return_addr),
             .ALU_result(_alu_result),
-            .load_data(_load_data)
+            .load_data(_load_data),
+            .src(_write_data)
         );
 
         Control_unit new_control_instance(
+            .clk(clk),
             .opcode(_opcode),
             .funct3(_funct3),
             .funct7(_funct7),
@@ -208,7 +209,8 @@ module RISCV_CPU_top(
             .reg_write_sig(_reg_write_sig),
             .blk_mem_we_sig(_blk_mem_we_sig),
             .ALU_src1_sig(_alu_src1_control_sig),
-            .ALU_src2_sig(_alu_src2_control_sig)
+            .ALU_src2_sig(_alu_src2_control_sig),
+            .reg_src_sig(_reg_src_sig)
         );
         
 

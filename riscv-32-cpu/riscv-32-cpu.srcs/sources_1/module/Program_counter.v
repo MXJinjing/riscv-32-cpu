@@ -40,8 +40,8 @@ module Program_counter(
     
     assign pc_add_4 = current_pc + 32'd4;
     
-    always @ (posedge clk) begin
-        if(rst)begin
+    always @ (negedge clk) begin
+        if(!rst)begin
             pc <= 32'd0;
         end
         else begin

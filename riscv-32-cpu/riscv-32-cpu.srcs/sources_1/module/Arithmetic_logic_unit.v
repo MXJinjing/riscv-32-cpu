@@ -22,7 +22,6 @@
 
 
 module Arithmetic_logic_unit(
-        input               clk,               //clock input signals
         input wire[4:0]     ALU_control_sig,   //control signals
 
         input wire[31:0]    src_1_data,        //input data from source 1
@@ -41,9 +40,8 @@ module Arithmetic_logic_unit(
     assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
     assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
 
-    always @(negedge clk) begin
+    always @(*) begin
         case (ALU_control_sig)
-
             //FOR ARITHMETIC INSTRUCTION
             `ALU_ADD:begin
                 ALU_result <= src_1_data + src_2_data;

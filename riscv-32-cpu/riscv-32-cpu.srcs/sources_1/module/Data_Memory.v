@@ -20,19 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Data_Memory(
+module Data_memory(
         input wire          clk,
-        input wire          mem_wea_signal,
+        input wire          mem_write_sig,
+        input wire          mem_read_sig,
         input wire[31:0]    mem_addr,
         input wire[31:0]    mem_write_data,
 
         output wire[31:0]   mem_read_data
+
     );
 
-    blk_mem_gen new_bram_instance (
+    
+    
+    blk_mem_gen_2 bram (
         .clka(clk),
-        .ena(1'b1),
-        .wea(mem_wea_signal),
+        .wea(mem_write_sig),
         .addra(mem_addr),
         .dina(mem_write_data),
         .douta(mem_read_data)

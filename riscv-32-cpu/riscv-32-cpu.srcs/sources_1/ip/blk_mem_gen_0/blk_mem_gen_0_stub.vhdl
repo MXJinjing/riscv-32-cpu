@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Mon Apr 24 17:53:30 2023
+-- Date        : Thu Apr 27 12:53:50 2023
 -- Host        : Dell-G15-WJJ running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               e:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top blk_mem_gen_0 -prefix
+--               blk_mem_gen_0_ blk_mem_gen_0_stub.vhdl
 -- Design      : blk_mem_gen_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7k70tfbv676-1

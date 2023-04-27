@@ -23,7 +23,7 @@
 module CPU_TOP_tb(
     );
     parameter period = 1;
-    parameter hperiod =0.5;
+    parameter hperiod = 0.5;
     parameter times =10;
 
     reg reset;
@@ -45,16 +45,22 @@ module CPU_TOP_tb(
     wire[31:0]       reg_rs2_data;
     wire[31:0]       return_addr;
     wire[31:0]       write_data;
-    wire[31:0]       load_data;
-    wire[31:0]       save_data;
+
     wire[2:0]        pc_control_sig;
     wire[4:0]        alu_control_sig;
     wire             reg_write_sig;
     wire[2:0]        alu_src1_control_sig;
     wire[2:0]        alu_src2_control_sig;
     wire[2:0]        reg_src_sig;
+    
+    wire             mem_clk;
+    wire[31:0]       load_data;
+    wire[31:0]       save_data;
     wire             mem_write_sig;
     wire             mem_read_sig;
+    wire             load_done_sig;
+    wire             store_done_sig;
+
 
     wire[31:0]      debug_reg0_data;
     wire[31:0]      debug_reg1_data;
@@ -114,7 +120,8 @@ module CPU_TOP_tb(
         
         .out_write_data(write_data),
         .out_return_addr(return_addr),
-
+        
+        .mem_clk(mem_clk),
         .out_load_data(load_data),
         .out_save_data(save_data),
 
@@ -126,6 +133,8 @@ module CPU_TOP_tb(
         .out_reg_src_sig(reg_src_sig),
         .out_mem_write_sig(mem_write_sig),
         .out_mem_read_sig(mem_read_sig),
+        .out_load_done_sig(load_done_sig),
+        .out_store_done_sig(store_done_sig),
 
         ._debug_reg0_data(debug_reg0_data),
         ._debug_reg1_data(debug_reg1_data),
@@ -162,10 +171,12 @@ module CPU_TOP_tb(
 
     );
     initial begin
-        reset <= 0;
-        clk <= 0;
-        #5
-        reset <= 1;
+        clk = 1;
+        reset = 0;
+        #1
+        reset = 1;
+        #200
+        $finish;
     end
     always #hperiod clk = ~clk;
     endmodule

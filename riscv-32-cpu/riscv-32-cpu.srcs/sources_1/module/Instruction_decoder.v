@@ -49,7 +49,7 @@ module Instruction_decoder(
     assign opcode = instruction[6:0];           
     assign funct3 = (R_type || I_type || S_type || B_type) ? instruction[14:12]: 3'b0;  // funct3 is not used in U and J type 
     assign funct7 = R_type ? instruction[31:25]: 7'b0;  // funct7 is not used in I, S, B, U and J type
-    assign reg_rd_addr = (R_type || I_type || U_type || J_type) ? instruction[11:7]: 5'b0;  // rd is not used in S and B type (STORE and BRANCH
+    assign reg_rd_addr = (R_type || I_type || U_type || J_type) ? instruction[11:7]: 5'b0;  // rd is not used in S and B type (STORE and BRANCH)
     assign reg_rs1_addr = (R_type || I_type || S_type || B_type) ? instruction[19:15]: 5'b0;  // rs1 is not used in U and J type (JALR)
     assign reg_rs2_addr = (R_type || S_type || B_type) ? instruction[24:20]: 5'b0;  // rs2 is not used in I and U type
 

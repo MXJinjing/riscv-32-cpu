@@ -72,7 +72,7 @@ module Register_bank(
     assign reg_rs2_data = x[reg_rs2_addr];
 
 
-    always @ (negedge clk) begin
+    always @ (posedge clk) begin
         if(reg_write_sig == `REG_WRITE_ENABLE) begin              //write data from the registers
             x[reg_rd_addr] <= write_data;
         end                        
@@ -114,8 +114,8 @@ module Register_bank(
     initial begin                          //initialize all registers to zero
         x[0] = 32'h0;
         x[1] = 32'h0;
-        x[2] = 32'h0;
-        x[3] = 32'h0;
+        x[2] = 32'h7ffffff0;
+        x[3] = 32'h10000000;
         x[4] = 32'h0;
         x[5] = 32'h0;
         x[6] = 32'h0;

@@ -60,7 +60,7 @@ module Frequency_multiplier_2x_b(
             if(!rst)
             Q <= 0;
             else
-            #0.1
+            //#0.1
             Q <= ~Q;
         end
         

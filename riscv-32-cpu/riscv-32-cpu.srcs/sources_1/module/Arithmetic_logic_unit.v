@@ -89,16 +89,16 @@ module Arithmetic_logic_unit(
 
             //FOR BRANCH INSTRUCTION
             `ALU_BEQ:begin
-                ALU_result <= (equal)? 1'b1 : 1'b0;
+                ALU_result <= (equal)? 32'b1 : 32'b0;
             end
             `ALU_BNE:begin
-                ALU_result <= (~equal)? 1'b1 : 1'b0;
+                ALU_result <= (~equal)? 32'b1 : 32'b0;
             end
-           `ALU_BLT:begin
-                ALU_result <= (signed_less_than)? 1'b1 : 1'b0;
+            `ALU_BLT:begin
+                ALU_result <= (signed_less_than)? 32'b1 : 32'b0;
             end
             `ALU_BGE:begin
-                ALU_result <= (~signed_less_than)? 1'b1 : 1'b0;
+                ALU_result <= (~signed_less_than)? 32'b1 : 32'b0;
             end
             `ALU_BLTU:begin
                 ALU_result <= (unsigned_less_than)? 1'b1 : 1'b0;

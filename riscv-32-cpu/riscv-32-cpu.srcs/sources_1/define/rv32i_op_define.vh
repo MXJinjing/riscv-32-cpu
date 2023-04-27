@@ -33,10 +33,10 @@
 `define SLTU_F3        3'b011              //set less than unsigned
 
 //-=-=-=-=-=-Branches-=-=-=-=-=-
-`define BRANCH_OP   7'b1100011          
+`define BRANCH_OP      7'b1100011          
 `define BEQ_F3         3'b000              //branch equal
 `define BNE_F3         3'b001              //branch not equal
-`define BLT_F3         3'b110              //branch less than
+`define BLT_F3         3'b100              //branch less than
 `define BGE_F3         3'b101              //branch greater than
 `define BLTU_F3        3'b110              //branch less than unsigned
 `define BGEU_F3        3'b111              //branch greater than unsigned

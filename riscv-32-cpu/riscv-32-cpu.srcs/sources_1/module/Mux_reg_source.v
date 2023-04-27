@@ -31,6 +31,6 @@ module Mux_reg_source(
     
     assign src = (reg_src_sig == `SRC_RETURN_ADDR) ? return_addr :
                 (reg_src_sig == `SRC_ALU) ? ALU_result:
-                (reg_src_sig == `SRC_LOAD) ? return_addr : 32'h00000000;
+                (reg_src_sig == `SRC_LOAD) ? load_data : 32'h00000000;
 
 endmodule

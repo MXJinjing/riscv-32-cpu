@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 `include "../define/pc_control_define.vh"
+`include "../define/im_wait_define.vh"
 
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
@@ -25,49 +26,53 @@
 module Program_counter(
         input wire          clk,                   // input clock signal
         input wire          rst,                   // reset signal
-        input wire[1:0]     PC_control_sig,        // control signals
+        input wire[2:0]     PC_control_sig,        // control signals
         input wire[31:0]    offset,
-        input wire          ALU_result,       // equality calculated by alu
+        input wire[31:0]    ALU_result,            //  calculated by alu
 
-        output reg[31:0]    pc,                    // register of program counter    
-        output reg[31:0]    return_addr            // return address
+        output wire[31:0]   pc,                    // register of program counter  
+        output reg          im_wait_sig,           // wait signal  
+        output wire[31:0]   return_addr            // return address
     );
+             
+    wire[31:0]  pc_add_4; 
+    reg[31:0]  current_pc;
 
-    wire[31:0]  current_pc;           // current pc
-    assign current_pc = pc;           // update current_pc from result
-
-    wire[31:0]  pc_add_4;
-    
+    assign pc = current_pc;
     assign pc_add_4 = current_pc + 32'd4;
     
-    always @ (negedge clk) begin
+    always @ (posedge clk) begin
         if(!rst)begin
-            pc <= 32'd0;
-        end
-        else begin
+            current_pc <= 32'd0;
+            im_wait_sig <= `IM_NO_WAIT;
+        end else
+        
         case (PC_control_sig)
-            `PC_NEXT:begin
-                pc <= pc_add_4;
-            end
             `PC_CONTROL_BRANCH:begin
-                pc <= ALU_result ? current_pc + offset : pc_add_4;
+                current_pc <= ALU_result ? current_pc  -32'd4 + offset   : pc_add_4;
+                im_wait_sig <= ALU_result ? `IM_WAIT : `IM_NO_WAIT;
             end
             `PC_CONTROL_JALR:begin
-                return_addr <= current_pc +  32'd4;
-                pc <= ALU_result & 32'hfffffffe;
+                current_pc <= (ALU_result ) & 32'hfffffffe;
+                im_wait_sig <= `IM_WAIT ;
             end
             `PC_CONTROL_JAL:begin
-                return_addr <= current_pc + 32'd4;
-                pc <= ALU_result;
+                current_pc <= ALU_result;
+                im_wait_sig <= `IM_WAIT;
             end
             default:begin
-                pc <= pc_add_4;
+                current_pc <= pc_add_4;
+                im_wait_sig <= `IM_NO_WAIT;
             end
         endcase
-        end
     end
+
+    
+    assign return_addr = (PC_control_sig == `PC_CONTROL_JALR)? current_pc:
+                      (PC_control_sig == `PC_CONTROL_JAL)? current_pc : 32'b0;
     
     initial begin
-        pc <= 32'b0;
+        current_pc = 32'b0;
+        im_wait_sig <= `IM_NO_WAIT;
     end
 endmodule

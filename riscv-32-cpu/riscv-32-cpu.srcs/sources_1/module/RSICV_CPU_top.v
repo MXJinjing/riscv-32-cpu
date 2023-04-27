@@ -47,17 +47,20 @@ module RISCV_CPU_top(
         output wire[31:0]       out_write_data,       
         output wire[31:0]       out_return_addr,
 
-        output wire[31:0]       out_load_data,
-        output wire[31:0]       out_save_data,
-
         output wire[2:0]        out_pc_control_sig,
         output wire[4:0]        out_alu_control_sig,
         output wire             out_reg_write_sig,
         output wire[2:0]        out_alu_src1_control_sig,
         output wire[2:0]        out_alu_src2_control_sig,
         output wire[2:0]        out_reg_src_sig,
+
+        output wire             mem_clk,
+        output wire[31:0]       out_load_data,
+        output wire[31:0]       out_save_data,
         output wire             out_mem_write_sig,
         output wire             out_mem_read_sig,
+        output wire             out_load_done_sig,
+        output wire             out_store_done_sig,
 
         output wire[31:0]   _debug_reg0_data,
         output wire[31:0]   _debug_reg1_data,
@@ -109,7 +112,9 @@ module RISCV_CPU_top(
         wire[2:0]  _reg_src_sig;
         wire       _mem_read_sig;
         wire       _mem_write_sig;
-     
+        wire       _load_done_sig;
+        wire       _store_done_sig;
+        wire       _im_wait_sig;
 
         // ADDRESS BUS
         wire[4:0]  _reg_rd_addr;
@@ -128,7 +133,6 @@ module RISCV_CPU_top(
         wire[31:0] _return_addr;
         wire[31:0] _write_data;
         wire[31:0] _load_data;
-        wire[31:0] _save_data;
 
         assign out_opcode = _opcode;
         assign out_funct3 = _funct3;
@@ -141,6 +145,7 @@ module RISCV_CPU_top(
         assign out_reg_src_sig = _reg_src_sig;
         assign out_mem_read_sig = _mem_read_sig;
         assign out_mem_write_sig = _mem_write_sig;
+        
         
         assign out_reg_rd_addr = _reg_rd_addr;
         assign out_reg_rs1_addr = _reg_rs1_addr;
@@ -160,11 +165,12 @@ module RISCV_CPU_top(
         assign out_return_addr = _return_addr;
         assign out_write_data = _write_data;
         assign out_load_data = _load_data;
-        assign out_save_data = _save_data;
-
-
-        wire overflow;
+        assign out_save_data = _reg_rs2_data;
+        assign out_load_done_sig = _load_done_sig;
+        assign out_store_done_sig = _store_done_sig;
         
+        wire overflow;
+      
 
         //-=-=-=-=-=-CPU COMPONENTS-=-=-=-=-=-=-
 
@@ -177,6 +183,7 @@ module RISCV_CPU_top(
             //outputs
             .ALU_result(_alu_result),
             .pc(_pc),
+            .im_wait_sig(_im_wait_sig),
             .return_addr(_return_addr)
         );
         
@@ -184,6 +191,7 @@ module RISCV_CPU_top(
             //inputs
             .clk(clk),
             .pc(_pc),
+            .im_wait_sig(_im_wait_sig),
             //outputs
             .instruction(_instruction)
         );
@@ -256,7 +264,7 @@ module RISCV_CPU_top(
             .overflow(_overflow)
         );
         
-        Mux_alu_source new_mux_alu_source1_instance(
+        Mux_alu_source1 new_mux_alu_source1_instance(
             //inputs
             .alu_src_control_sig(_alu_src1_control_sig),
             .reg_data(_reg_rs1_data),
@@ -266,7 +274,7 @@ module RISCV_CPU_top(
             .src(_src_1_data)
         );
 
-        Mux_alu_source new_mux_alu_source2_instance(
+        Mux_alu_source2 new_mux_alu_source2_instance(
             //inputs
             .alu_src_control_sig(_alu_src2_control_sig),
             .reg_data(_reg_rs2_data),
@@ -310,9 +318,12 @@ module RISCV_CPU_top(
             .mem_write_sig(_mem_write_sig),
             .mem_read_sig(_mem_read_sig),
             .mem_addr(_alu_result),
-            .mem_write_data(_save_data),
+            .mem_write_data(_reg_rs2_data),
             //outputs
-            .mem_read_data(_load_data)
+            .mem_clk(mem_clk),
+            .mem_read_data(_load_data),
+            .load_done_sig(_load_done_sig),
+            .store_done_sig(_store_done_sig)
         );
 
 

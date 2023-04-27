@@ -19,12 +19,12 @@
 `define ALU_SRA         5'b01010       //shift right arithmetic
 
 //-=-=-=-=-=-Branches-=-=-=-=-=-
-`define ALU_BEQ         5'b10000          //branch if equal
-`define ALU_BNE         5'b10001          //branch if not equal
-`define ALU_BLT         5'b10010          //branch if less than (same code as SLT)
-`define ALU_BGE         5'b10011          //branch if greater than
-`define ALU_BLTU        5'b10100          //branch if less than unsigned
-`define ALU_BGEU        5'b10101          //branch if greater than unsigned
+`define ALU_BEQ         5'b11000          //branch if equal
+`define ALU_BNE         5'b11001          //branch if not equal
+`define ALU_BLT         5'b11010          //branch if less than (same code as SLT)
+`define ALU_BGE         5'b11011          //branch if greater than
+`define ALU_BLTU        5'b11100          //branch if less than unsigned
+`define ALU_BGEU        5'b11101          //branch if greater than unsigned
 
 //-=-=-=-=-LOAD AND SAVE-=-=-=-=-
-`define ALU_OFFSET      5'b11100          //calculate the offset
+`define ALU_OFFSET      5'b11111          //calculate the offset

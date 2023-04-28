@@ -175,7 +175,7 @@ module CPU_TOP_tb(
         reset = 0;
         #1
         reset = 1;
-        #200
+        #300
         $finish;
     end
     always #hperiod clk = ~clk;

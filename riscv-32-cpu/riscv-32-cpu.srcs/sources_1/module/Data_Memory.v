@@ -47,7 +47,7 @@ module Data_memory(
     blk_mem_gen_2 bram (
         .clka(mem_clk),
         .wea(store_done_sig),
-        .addra(mem_addr),
+        .addra(mem_addr[31:2]),
         .dina(mem_write_data),
         .douta(data_out)
     );

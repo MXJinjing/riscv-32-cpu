@@ -57,9 +57,6 @@ module CPU_TOP_tb(
     wire[31:0]       load_data;
     wire[31:0]       save_data;
     wire             mem_write_sig;
-    wire             mem_read_sig;
-    wire             load_done_sig;
-    wire             store_done_sig;
 
 
     wire[31:0]      debug_reg0_data;
@@ -132,9 +129,6 @@ module CPU_TOP_tb(
         .out_alu_src2_control_sig(alu_src2_control_sig),
         .out_reg_src_sig(reg_src_sig),
         .out_mem_write_sig(mem_write_sig),
-        .out_mem_read_sig(mem_read_sig),
-        .out_load_done_sig(load_done_sig),
-        .out_store_done_sig(store_done_sig),
 
         ._debug_reg0_data(debug_reg0_data),
         ._debug_reg1_data(debug_reg1_data),
@@ -175,7 +169,7 @@ module CPU_TOP_tb(
         reset = 0;
         #1
         reset = 1;
-        #300
+        #651
         $finish;
     end
     always #hperiod clk = ~clk;

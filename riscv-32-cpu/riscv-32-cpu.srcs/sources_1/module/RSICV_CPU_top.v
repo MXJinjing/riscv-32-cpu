@@ -58,9 +58,6 @@ module RISCV_CPU_top(
         output wire[31:0]       out_load_data,
         output wire[31:0]       out_save_data,
         output wire             out_mem_write_sig,
-        output wire             out_mem_read_sig,
-        output wire             out_load_done_sig,
-        output wire             out_store_done_sig,
 
         output wire[31:0]   _debug_reg0_data,
         output wire[31:0]   _debug_reg1_data,
@@ -99,7 +96,7 @@ module RISCV_CPU_top(
     
 
 
-        // CONTROL BUS
+        // 控制信号线
         wire[6:0]  _opcode;
         wire[2:0]  _funct3;
         wire[6:0]  _funct7;
@@ -116,13 +113,13 @@ module RISCV_CPU_top(
         wire       _store_done_sig;
         wire       _im_wait_sig;
 
-        // ADDRESS BUS
+        // 地址传输线
         wire[4:0]  _reg_rd_addr;
         wire[4:0]  _reg_rs1_addr;
         wire[4:0]  _reg_rs2_addr;
         wire[31:0] _pc;
 
-        // DATA BUS
+        // 数据传输线
         wire[31:0] _instruction;
         wire[31:0] _imm;
         wire[31:0] _alu_result;
@@ -134,6 +131,7 @@ module RISCV_CPU_top(
         wire[31:0] _write_data;
         wire[31:0] _load_data;
 
+        // debug
         assign out_opcode = _opcode;
         assign out_funct3 = _funct3;
         assign out_funct7 = _funct7;
@@ -166,13 +164,9 @@ module RISCV_CPU_top(
         assign out_write_data = _write_data;
         assign out_load_data = _load_data;
         assign out_save_data = _reg_rs2_data;
-        assign out_load_done_sig = _load_done_sig;
-        assign out_store_done_sig = _store_done_sig;
-        
-        wire overflow;
       
 
-        //-=-=-=-=-=-CPU COMPONENTS-=-=-=-=-=-=-
+        //-=-=-=-=-=-CPU 主要部分-=-=-=-=-=-=-
 
         Program_counter new_pc_instance(
             //inputs
@@ -211,6 +205,7 @@ module RISCV_CPU_top(
 
         Register_bank new_reg_instance(
             //inputs
+            .rst(rst),
             .clk(clk),                       
             .reg_write_sig(_reg_write_sig),             
             .reg_rs1_addr(_reg_rs1_addr),
@@ -260,8 +255,7 @@ module RISCV_CPU_top(
             //outputs
             .src_1_data(_src_1_data),
             .src_2_data(_src_2_data),
-            .ALU_result(_alu_result),
-            .overflow(_overflow)
+            .ALU_result(_alu_result)
         );
         
         Mux_alu_source1 new_mux_alu_source1_instance(
@@ -312,6 +306,8 @@ module RISCV_CPU_top(
             .mem_read_sig(_mem_read_sig)
         );
 
+        //-=-=-=-=-=-=-内存部分-=-=-=-=-=-=-
+
         Data_memory new_data_mem_instance(
             //inputs
             .clk(clk),
@@ -321,9 +317,7 @@ module RISCV_CPU_top(
             .mem_write_data(_reg_rs2_data),
             //outputs
             .mem_clk(mem_clk),
-            .mem_read_data(_load_data),
-            .load_done_sig(_load_done_sig),
-            .store_done_sig(_store_done_sig)
+            .mem_read_data(_load_data)
         );
 
 

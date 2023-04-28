@@ -21,16 +21,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Mux_reg_source(
-        input wire[2:0] reg_src_sig,
-        input wire[31:0] return_addr,
-        input wire[31:0] ALU_result,
-        input wire[31:0] load_data,
-        output wire[31:0] src
+module Mux_reg_source(  // 用于选择寄存器的写入数据来源
+        input wire[2:0]   reg_src_sig,        // 用于选择寄存器的写入数据来源的控制信号
+        input wire[31:0]  return_addr,        // 返回地址
+        input wire[31:0]  ALU_result,         // ALU的运算结果
+        input wire[31:0]  load_data,          // 从存储器中读取的数据
+        output wire[31:0] src                 // 输出到寄存器的数据
     );
     
-    assign src = (reg_src_sig == `SRC_RETURN_ADDR) ? return_addr :
-                (reg_src_sig == `SRC_ALU) ? ALU_result:
-                (reg_src_sig == `SRC_LOAD) ? load_data : 32'h00000000;
+    assign src = (reg_src_sig == `SRC_RETURN_ADDR) ? return_addr :          // 选择返回地址
+                (reg_src_sig == `SRC_ALU) ? ALU_result:                     // 选择ALU的运算结果
+                (reg_src_sig == `SRC_LOAD) ? load_data : 32'h00000000;      // 选择从存储器中读取的数据
 
 endmodule

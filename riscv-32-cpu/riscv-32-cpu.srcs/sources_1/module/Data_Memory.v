@@ -22,57 +22,46 @@
 
 
 module Data_memory(
-        input wire          clk,
-        input wire          mem_write_sig,
-        input wire          mem_read_sig,
-        input wire[31:0]    mem_addr,
-        input wire[31:0]    mem_write_data,
+        input wire          clk,    // CPU时钟
+        input wire          mem_write_sig,  // 内存写入信号
+        input wire          mem_read_sig,   // 内存读取信号
+        input wire[31:0]    mem_addr,       // 内存地址
+        input wire[31:0]    mem_write_data, // 内存写入数据
 
-        output wire        mem_clk,
-        output reg[31:0]   mem_read_data,
-        output reg         load_done_sig,
-        output reg         store_done_sig
+        output wire         mem_clk,        // 内存时钟
+        output wire[31:0]   mem_read_data   // 内存读取数据
     );
 
-    
-    wire[31:0]  data_out;
+    wire[31:0]  douta;
+    reg [31:0]  data_out;
+    wire        wea;
+
     assign mem_clk = clk_2x;
+    assign mem_read_data = data_out;
+    assign wea = mem_write_sig & clk;
     
-    Frequency_multiplier_2x freq_mul (
+    Frequency_multiplier_2x freq_mul (  // 时钟频率倍频
         .clk(clk),
         .rst(1'b1),
         .clk_out(clk_2x)
     );
 
-    blk_mem_gen_2 bram (
-        .clka(mem_clk),
-        .wea(store_done_sig),
+    blk_mem_gen_2 bram (    // 内存模块
+        .clka(clk_2x),
+        .wea(wea),
         .addra(mem_addr[31:2]),
         .dina(mem_write_data),
-        .douta(data_out)
+        .douta(douta)
     );
 
-
-    always @(posedge mem_read_sig) begin
-        load_done_sig <= `BUSY;
-    end
-    
-    always @(data_out) begin
-        mem_read_data <= data_out;
-        load_done_sig <= `IDLE;
-    end
-    
-    always @(posedge mem_write_sig) begin
-        store_done_sig <= `BUSY;
-    end
-    
-    always @(negedge mem_write_sig) begin
-        store_done_sig <= `IDLE;
+    always @(douta) begin   // 内存读取数据
+        if(mem_read_sig) begin
+            data_out <= douta;
+        end
     end
     
     initial begin
-        load_done_sig <= `IDLE;
-        store_done_sig <= `IDLE;
+        data_out <= 0;
     end
 
 endmodule

@@ -10,7 +10,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: The instruction memory of CPU
 // 
 // Dependencies: 
 // 
@@ -23,31 +23,36 @@
 
 module Instruction_memory (
         input wire clk,
-        input wire [31:0] pc,           //pc address
-        input wire im_wait_sig,         //wait signal
-        output wire [31:0] instruction         //instruction out
+        input wire [31:0] pc,               // 程序计数器（地址）
+        input wire im_wait_sig,             // 指令内存等待信号
+        output wire [31:0] instruction      // 指令
     );
     
-    reg [31:0] instruction_reg;
+    reg [31:0] instruction_reg;             // 指令寄存器
     
-    wire[31:0] _pc;
-    assign _pc = pc;
-    
-    Frequency_multiplier_2x freq_mul (
+    Frequency_multiplier_2x freq_mul (     // 时钟频率乘2模块
         .clk(clk),
-        .rst(1'b1),
+        .rst(1'b1),        // rst信号为1时，输出时钟信号为2倍频率
         .clk_out(clk_2x)
     );
     
+    // 当指令内存等待信号为1时，指令寄存器输出0，进入等待状态
     assign instruction = (im_wait_sig)?   32'h00000000 : instruction_reg;
     
     wire[31:0] _douta;
-    blk_mem_gen_0 uut(.clka(~clk_2x),.addra(_pc[12:2]),.douta(_douta));
 
+    blk_mem_gen_0 uut(  // 内存模块
+        .clka(~clk_2x),
+        .addra(pc[12:2]),   // 内存宽度为32，所以地址右移2位，因此只能支持4字节对齐读取
+        .douta(_douta)
+        );
+
+    // 指令寄存器的更新
     always @(posedge clk) begin
         instruction_reg <= _douta;
     end
     
+    // 指令寄存器的初始化
     initial begin
         instruction_reg <= 32'h00000000;
     end

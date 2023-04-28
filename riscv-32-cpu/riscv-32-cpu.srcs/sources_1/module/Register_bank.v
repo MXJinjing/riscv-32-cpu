@@ -21,15 +21,17 @@
 
 
 module Register_bank(
-        input wire clk,                       //clock input signals
-        input wire reg_write_sig,             //indicate whether a write operation is required
-        input wire[4:0] reg_rs1_addr,          //address of the first register to be read
-        input wire[4:0] reg_rs2_addr,          //address of the second register to be read
-        input wire[4:0] reg_rd_addr,         //address of the first register to be write
-        input wire[31:0] write_data,          //date to be written to the register
-        output wire[31:0] reg_rs1_data,         //data that read from the first register
-        output wire[31:0] reg_rs2_data,         //data that read from the second register
+        input  wire         rst,                // 复位信号
+        input  wire         clk,                // 时钟信号                  
+        input  wire         reg_write_sig,      // 寄存器写入信号
+        input  wire[4:0]    reg_rs1_addr,       // 寄存器rs1的地址
+        input  wire[4:0]    reg_rs2_addr,       // 寄存器rs2的地址
+        input  wire[4:0]    reg_rd_addr,        // 寄存器rd的地址
+        input  wire[31:0]   write_data,         // 写入寄存器的数据
+        output wire[31:0]   reg_rs1_data,       // 寄存器rs1的数据
+        output wire[31:0]   reg_rs2_data,       // 寄存器rs2的数据
 
+        // 用于在模拟时查看寄存器的数据
         output wire[31:0] debug_reg0_data,
         output wire[31:0] debug_reg1_data,
         output wire[31:0] debug_reg2_data,
@@ -65,15 +67,49 @@ module Register_bank(
 
     );
     
-    reg[31:0]  x[31:0];                       //registers x[0] to x[31]
+    reg[31:0]  x[31:0];                       // 32个32位寄存器，分别是x0~x31
     
-    
-    assign reg_rs1_data = x[reg_rs1_addr];        //get data from the registers
-    assign reg_rs2_data = x[reg_rs2_addr];
+    assign reg_rs1_data = x[reg_rs1_addr];        // 从寄存器中读取数据
+    assign reg_rs2_data = x[reg_rs2_addr];        // 从寄存器中读取数据
 
 
-    always @ (posedge clk) begin
-        if(reg_write_sig == `REG_WRITE_ENABLE) begin              //write data from the registers
+    always @ (posedge clk) begin            
+        if(!rst) begin
+            x[0] <= 32'h0;
+            x[1] <= 32'h0;
+            x[2] <= 32'h00007f00;
+            x[3] <= 32'h00001000;
+            x[4] <= 32'h0;
+            x[5] <= 32'h0;
+            x[6] <= 32'h0;
+            x[7] <= 32'h0;
+            x[8] <= 32'h0;
+            x[9] <= 32'h0;
+            x[10] <= 32'h0;
+            x[11] <= 32'h0;
+            x[12] <= 32'h0;
+            x[13] <= 32'h0;
+            x[14] <= 32'h0;
+            x[15] <= 32'h0;
+            x[16] <= 32'h0;
+            x[17] <= 32'h0;
+            x[18] <= 32'h0;
+            x[19] <= 32'h0;
+            x[20] <= 32'h0;
+            x[21] <= 32'h0;
+            x[22] <= 32'h0;
+            x[23] <= 32'h0;
+            x[24] <= 32'h0;
+            x[25] <= 32'h0;
+            x[26] <= 32'h0;
+            x[27] <= 32'h0;
+            x[28] <= 32'h0;
+            x[29] <= 32'h0;
+            x[30] <= 32'h0;
+            x[31] <= 32'h0;
+        end
+        else
+        if(reg_write_sig == `REG_WRITE_ENABLE) begin   // 在下一个时钟时，写入数据            
             x[reg_rd_addr] <= write_data;
         end                        
     end
@@ -111,11 +147,11 @@ module Register_bank(
     assign debug_reg30_data = x[30];
     assign debug_reg31_data = x[31];
     
-    initial begin                          //initialize all registers to zero
+    initial begin                         
         x[0] = 32'h0;
         x[1] = 32'h0;
-        x[2] = 32'h7ffffff0;
-        x[3] = 32'h10000000;
+        x[2] = 32'h00007f00;
+        x[3] = 32'h00001000;
         x[4] = 32'h0;
         x[5] = 32'h0;
         x[6] = 32'h0;

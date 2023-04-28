@@ -10,7 +10,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: The length of the data to be loaded
 // 
 // Dependencies: 
 // 
@@ -20,6 +20,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+
+// 由于CPU没有支持 lb, lh, lhu, lbu, 所以这里的模块没有使用
 
 module Mux_lenth(
         input wire[2:0]      mux_lenth_sig,

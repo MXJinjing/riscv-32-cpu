@@ -20,21 +20,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-// This is a frequency multiplier that can multiply the frequency by 2 or 4 times.
 module Frequency_multiplier_2x(
         input clk,
         input rst,
         output  wire clk_out 
  );
-
+        // 使用D触发器，将输入时钟信号与输出时钟信号异或，得到2倍频率的时钟信号
         reg Q;
         wire NOR_clk;
         always@(posedge NOR_clk or negedge rst)
             begin
             if(!rst)
-            Q <= 0;
+            Q <= 0;     // rst信号为1时，输出时钟信号为2倍频率；rst信号为0时，输出时钟信号为1倍频率
             else
-            #0.25
+            //#0.25       // 用于显示波形，在实际使用时应该注释掉
             Q <= ~Q;
         end
 
@@ -52,7 +51,6 @@ module Frequency_multiplier_2x_b(
         input rst,
         output wire clk_out 
  );
-
         reg Q;
         wire NOR_clk;
         always@(posedge NOR_clk or negedge rst)
@@ -60,7 +58,7 @@ module Frequency_multiplier_2x_b(
             if(!rst)
             Q <= 0;
             else
-            //#0.1
+            #0.1       // 用于显示波形，在实际使用时应该注释掉
             Q <= ~Q;
         end
         
@@ -73,7 +71,7 @@ module Frequency_multiplier_2x_b(
  
 endmodule
 
-module Frequency_multiplier_4x(
+module Frequency_multiplier_4x(     // 4倍频率的时钟信号
         input wire clk,
         input wire rst,
         input wire clk_out);

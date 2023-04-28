@@ -22,94 +22,40 @@
 
 
 module Arithmetic_logic_unit(
-        input wire[4:0]     ALU_control_sig,   //control signals
+        input wire[4:0]     ALU_control_sig,   // 控制信号
 
-        input wire[31:0]    src_1_data,        //input data from source 1
-        input wire[31:0]    src_2_data,        //input data from source 2
+        input wire[31:0]    src_1_data,        // ALU的来源数据1（src_1）
+        input wire[31:0]    src_2_data,        // ALU的来源数据2（src_2）
 
-        output reg[31:0]    ALU_result,        //output data
-        output reg          overflow           //overflow signal
+        output wire[31:0]    ALU_result        // ALU的运算结果
     );
 
-    wire equal;
-    wire signed_less_than;
-    wire unsigned_less_than;
-    wire[31:0] sext_offset;
+    wire equal;                 // 运算结果是否相等
+    wire signed_less_than;      // 运算结果是否有符号小于
+    wire unsigned_less_than;    // 运算结果是否无符号小于
 
+    // 将要多次进行运算的模块取出，可以将其定义为一个子模块
     assign equal = (src_1_data == src_2_data) ? 1'b1 : 1'b0;
     assign signed_less_than = ($signed(src_1_data) < $signed(src_2_data)) ? 1'b1 : 1'b0;
     assign unsigned_less_than = ($unsigned(src_1_data) < $unsigned(src_2_data)) ? 1'b1 : 1'b0;
 
-    always @(*) begin
-        case (ALU_control_sig)
-            //FOR ARITHMETIC INSTRUCTION
-            `ALU_ADD:begin
-                ALU_result <= src_1_data + src_2_data;
-                overflow = ($signed(src_1_data) + $signed(src_2_data) > 32'h7fffffff) || 
-                ($signed(src_1_data) + $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
-            end
-            `ALU_SUB:begin
-                ALU_result <= src_1_data - src_2_data;
-                overflow = ($signed(src_1_data) - $signed(src_2_data) > 32'h7fffffff) || 
-                ($signed(src_1_data) - $signed(src_2_data) < 32'h80000000)? 1'b1 : 1'b0;     //report overflow
-            end
-
-            //FOR LOGIC INSTRUCTION
-            `ALU_AND:begin
-                ALU_result <= src_1_data & src_2_data;
-            end
-            `ALU_OR:begin
-                ALU_result <= src_1_data | src_2_data;
-            end
-            `ALU_XOR:begin
-                ALU_result <= src_1_data ^ src_2_data;
-            end
-            `ALU_NOR:begin
-                ALU_result <= ~(src_1_data | src_2_data);
-            end
-
-            //FOR COMPARE INSTRUCTION
-            `ALU_SLT:begin
-                ALU_result = (signed_less_than)? 32'b1 : 32'b0;
-            end
-            `ALU_SLTU:begin
-                ALU_result = (unsigned_less_than)? 32'b1 : 32'b0;
-            end
-
-            //FOR SHIFT INSTRUCTION
-            `ALU_SLL:begin
-                ALU_result <= src_1_data << src_2_data[4:0];
-            end
-            `ALU_SRL:begin
-                ALU_result <= src_1_data >> src_2_data[4:0];
-            end
-            `ALU_SRA:begin
-                ALU_result <= src_1_data >>> src_2_data[4:0];
-            end
-
-            //FOR BRANCH INSTRUCTION
-            `ALU_BEQ:begin
-                ALU_result <= (equal)? 32'b1 : 32'b0;
-            end
-            `ALU_BNE:begin
-                ALU_result <= (~equal)? 32'b1 : 32'b0;
-            end
-            `ALU_BLT:begin
-                ALU_result <= (signed_less_than)? 32'b1 : 32'b0;
-            end
-            `ALU_BGE:begin
-                ALU_result <= (~signed_less_than)? 32'b1 : 32'b0;
-            end
-            `ALU_BLTU:begin
-                ALU_result <= (unsigned_less_than)? 1'b1 : 1'b0;
-            end
-            `ALU_BGEU:begin
-                ALU_result <= (~unsigned_less_than)? 1'b1 : 1'b0;
-            end
-            //DO NOTHING FOR OTHER INSTRUCTION
-            default:begin
-                ALU_result <= 32'hffffffff;
-            end
-        endcase
-    end
+    // 选择计算类型，运行ALU的计算，并将结果输出
+    assign ALU_result = (ALU_control_sig == `ALU_ADD)? src_1_data + src_2_data :            // 加法运算
+                    (ALU_control_sig == `ALU_SUB)? src_1_data - src_2_data :                // 减法运算
+                    (ALU_control_sig == `ALU_AND)? src_1_data & src_2_data :                // 按位与运算
+                    (ALU_control_sig == `ALU_OR)? src_1_data | src_2_data :                 // 按位或运算
+                    (ALU_control_sig == `ALU_XOR)? src_1_data ^ src_2_data :                // 按位异或运算
+                    (ALU_control_sig == `ALU_NOR)? ~(src_1_data | src_2_data) :             // 按位或非运算
+                    (ALU_control_sig == `ALU_SLT)? (signed_less_than)? 32'b1 : 32'b0 :      // 有符号小于运算
+                    (ALU_control_sig == `ALU_SLTU)? (unsigned_less_than)? 32'b1 : 32'b0 :   // 无符号小于运算
+                    (ALU_control_sig == `ALU_SLL)? src_1_data << src_2_data[4:0] :          // 逻辑左移运算
+                    (ALU_control_sig == `ALU_SRL)? src_1_data >> src_2_data[4:0] :          // 逻辑右移运算
+                    (ALU_control_sig == `ALU_SRA)? src_1_data >>> src_2_data[4:0] :         // 算术右移运算
+                    (ALU_control_sig == `ALU_BEQ)? (equal)? 32'b1 : 32'b0 :                 // 相等运算
+                    (ALU_control_sig == `ALU_BNE)? (~equal)? 32'b1 : 32'b0 :                // 不相等运算
+                    (ALU_control_sig == `ALU_BLT)? (signed_less_than)? 32'b1 : 32'b0 :      // 有符号小于跳转信号
+                    (ALU_control_sig == `ALU_BGE)? (~signed_less_than)? 32'b1 : 32'b0 :     // 有符号大于等于跳转信号
+                    (ALU_control_sig == `ALU_BLTU)? (unsigned_less_than)? 32'b1 : 1'b0 :    // 无符号小于跳转信号
+                    (ALU_control_sig == `ALU_BGEU)? (~unsigned_less_than)? 32'b1 : 1'b0 :   // 无符号大于等于跳转信号
+                    32'hffffffff;       // 默认输出全1
 endmodule

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="277004fs"></ZoomStartTime>
-      <ZoomEndTime time="284200fs"></ZoomEndTime>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="7677fs"></ZoomEndTime>
       <Cursor1Time time="281600fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="293"></NameColumnWidth>
-      <ValueColumnWidth column_width="144"></ValueColumnWidth>
+      <ValueColumnWidth column_width="137"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="66" />
+   <WVObjectSize size="63" />
    <wvobject fp_name="/CPU_TOP_tb/reset" type="logic">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
@@ -131,18 +131,6 @@
    <wvobject fp_name="/CPU_TOP_tb/mem_write_sig" type="logic">
       <obj_property name="ElementShortName">mem_write_sig</obj_property>
       <obj_property name="ObjectShortName">mem_write_sig</obj_property>
-   </wvobject>
-   <wvobject fp_name="/CPU_TOP_tb/mem_read_sig" type="logic">
-      <obj_property name="ElementShortName">mem_read_sig</obj_property>
-      <obj_property name="ObjectShortName">mem_read_sig</obj_property>
-   </wvobject>
-   <wvobject fp_name="/CPU_TOP_tb/load_done_sig" type="logic">
-      <obj_property name="ElementShortName">load_done_sig</obj_property>
-      <obj_property name="ObjectShortName">load_done_sig</obj_property>
-   </wvobject>
-   <wvobject fp_name="/CPU_TOP_tb/store_done_sig" type="logic">
-      <obj_property name="ElementShortName">store_done_sig</obj_property>
-      <obj_property name="ObjectShortName">store_done_sig</obj_property>
    </wvobject>
    <wvobject fp_name="/CPU_TOP_tb/debug_reg0_data" type="array">
       <obj_property name="ElementShortName">debug_reg0_data[31:0]</obj_property>

@@ -22,6 +22,7 @@
 
 
 module Instruction_memory (
+        input wire rst,
         input wire clk,
         input wire [31:0] pc,               // 程序计数器（地址）
         input wire im_wait_sig,             // 指令内存等待信号
@@ -36,9 +37,6 @@ module Instruction_memory (
         .clk_out(clk_2x)
     );
     
-    // 当指令内存等待信号为1时，指令寄存器输出0，进入等待状态
-    assign instruction = (im_wait_sig)?   32'h00000000 : instruction_reg;
-    
     wire[31:0] _douta;
 
     blk_mem_gen_0 uut(  // 内存模块
@@ -49,9 +47,19 @@ module Instruction_memory (
 
     // 指令寄存器的更新
     always @(posedge clk) begin
-        instruction_reg <= _douta;
+        if (!rst) begin
+            instruction_reg <= 32'h00000000;
+        end else begin
+            instruction_reg <= _douta;
+        end
+    end
+
+    always @(negedge clk) begin
+
     end
     
+    assign instruction = (im_wait_sig == 1'b1) ? 32'h00000000 : instruction_reg;
+
     // 指令寄存器的初始化
     initial begin
         instruction_reg <= 32'h00000000;

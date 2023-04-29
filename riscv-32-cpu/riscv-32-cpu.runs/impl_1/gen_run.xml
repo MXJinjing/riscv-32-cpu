@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682701065">
+<GenRun Id="impl_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682765933">
   <File Type="BITSTR-BMM" Name="RISCV_CPU_top_bd.bmm"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="RISCV_CPU_top_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="RISCV_CPU_top_timing_summary_init.rpt"/>

@@ -1,6 +1,6 @@
 
 `define PC_NEXT                 3'b000
-
+`define PC_IDLE                 3'b111
 //-=-=-=-=-=-=-Branches-=-=-=-=-=-=-=-
 `define PC_CONTROL_BRANCH       3'b001          //branch
 

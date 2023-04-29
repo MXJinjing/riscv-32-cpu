@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682700712">
+<GenRun Id="synth_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682765933">
   <File Type="PA-TCL" Name="RISCV_CPU_top.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="RISCV_CPU_top_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="RISCV_CPU_top_reports.tcl"/>

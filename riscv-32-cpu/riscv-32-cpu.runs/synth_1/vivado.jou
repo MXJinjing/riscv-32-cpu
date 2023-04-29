@@ -2,8 +2,8 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Sat Apr 29 18:58:56 2023
-# Process ID: 4776
+# Start of session at: Sat Apr 29 21:54:39 2023
+# Process ID: 25440
 # Current directory: E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.runs/synth_1
 # Command line: vivado.exe -log RISCV_CPU_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source RISCV_CPU_top.tcl
 # Log file: E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.runs/synth_1/RISCV_CPU_top.vds

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682765933">
+<GenRun Id="impl_1" LaunchPart="xc7k70tfbv676-1" LaunchTime="1682776477">
   <File Type="BITSTR-BMM" Name="RISCV_CPU_top_bd.bmm"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="RISCV_CPU_top_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="RISCV_CPU_top_timing_summary_init.rpt"/>
@@ -278,7 +278,14 @@
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
     <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/new/cpu.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
     <Config>
+      <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/cpu.xdc"/>
       <Option Name="ConstrsType" Val="XDC"/>
     </Config>
   </FileSet>

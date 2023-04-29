@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Sat Apr 29 18:59:57 2023
+| Date         : Sat Apr 29 21:55:40 2023
 | Host         : Dell-G15-WJJ running 64-bit major release  (build 9200)
 | Command      : report_utilization -file RISCV_CPU_top_utilization_synth.rpt -pb RISCV_CPU_top_utilization_synth.pb
 | Design       : RISCV_CPU_top
@@ -30,8 +30,8 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             | 1389 |     0 |     41000 |  3.39 |
-|   LUT as Logic          | 1389 |     0 |     41000 |  3.39 |
+| Slice LUTs*             | 1361 |     0 |     41000 |  3.32 |
+|   LUT as Logic          | 1361 |     0 |     41000 |  3.32 |
 |   LUT as Memory         |    0 |     0 |     13400 |  0.00 |
 | Slice Registers         | 1127 |     0 |     82000 |  1.37 |
 |   Register as Flip Flop | 1095 |     0 |     82000 |  1.34 |
@@ -90,7 +90,7 @@ Table of Contents
 +-----------------------------+------+-------+-----------+-------+
 |          Site Type          | Used | Fixed | Available | Util% |
 +-----------------------------+------+-------+-----------+-------+
-| Bonded IOB                  |  290 |     0 |       300 | 96.67 |
+| Bonded IOB                  |  226 |     0 |       300 | 75.33 |
 | Bonded IPADs                |    0 |     0 |        26 |  0.00 |
 | Bonded OPADs                |    0 |     0 |        16 |  0.00 |
 | PHY_CONTROL                 |    0 |     0 |         6 |  0.00 |
@@ -154,12 +154,11 @@ Table of Contents
 | FDRE     | 1087 |        Flop & Latch |
 | LUT6     |  968 |                 LUT |
 | MUXF7    |  256 |               MuxFx |
-| LUT4     |  225 |                 LUT |
 | OBUF     |  224 |                  IO |
-| LUT2     |  146 |                 LUT |
-| LUT3     |   89 |                 LUT |
-| LUT5     |   74 |                 LUT |
-| OBUFT    |   64 |                  IO |
+| LUT4     |  177 |                 LUT |
+| LUT2     |  140 |                 LUT |
+| LUT3     |  100 |                 LUT |
+| LUT5     |   80 |                 LUT |
 | CARRY4   |   51 |          CarryLogic |
 | LUT1     |   36 |                 LUT |
 | LDCE     |   32 |        Flop & Latch |

@@ -18,6 +18,9 @@ proc create_report { reportName command } {
   }
 }
 set_param chipscope.maxJobs 4
+set_param synth.incrementalSynthesisCache C:/Users/23526/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-20788-Dell-G15-WJJ/incrSyn
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 create_project -in_memory -part xc7k70tfbv676-1
 
 set_param project.singleFileAddWarning.threshold 0
@@ -80,6 +83,9 @@ set_property used_in_implementation false [get_files -all e:/vivado/riscv-32-ver
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/constrs_1/new/cpu.xdc
+set_property used_in_implementation false [get_files E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/constrs_1/new/cpu.xdc]
+
 read_xdc dont_touch.xdc
 set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1

@@ -60,12 +60,15 @@ proc step_failed { step } {
   close $ch
 }
 
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 
 start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
   set_param chipscope.maxJobs 4
+  set_param synth.incrementalSynthesisCache C:/Users/23526/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-20788-Dell-G15-WJJ/incrSyn
   create_project -in_memory -part xc7k70tfbv676-1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
@@ -78,6 +81,7 @@ set rc [catch {
   read_ip -quiet E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/sources_1/ip/blk_mem_gen_1/blk_mem_gen_1.xci
   read_ip -quiet E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
   read_ip -quiet E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/sources_1/ip/blk_mem_gen_2/blk_mem_gen_2.xci
+  read_xdc E:/vivado/riscv-32-verilog/riscv-32-cpu/riscv-32-cpu.srcs/constrs_1/new/cpu.xdc
   link_design -top RISCV_CPU_top -part xc7k70tfbv676-1
   close_msg_db -file init_design.pb
 } RESULT]
